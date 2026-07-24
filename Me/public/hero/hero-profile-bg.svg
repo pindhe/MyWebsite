@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="50%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <rect width="800" height="800" fill="url(#spot)"/>
+
+  <g opacity="0.22">
+    <rect x="80" y="110" width="640" height="420" rx="24" fill="#0f172a"/>
+    <rect x="80" y="110" width="640" height="48" rx="24" fill="#1e293b"/>
+    <circle cx="108" cy="134" r="7" fill="#ef4444"/>
+    <circle cx="132" cy="134" r="7" fill="#eab308"/>
+    <circle cx="156" cy="134" r="7" fill="#22c55e"/>
+    <rect x="190" y="124" width="220" height="20" rx="10" fill="#334155"/>
+    <rect x="110" y="190" width="180" height="14" rx="7" fill="#7c3aed"/>
+    <rect x="110" y="220" width="260" height="10" rx="5" fill="#475569"/>
+    <rect x="110" y="242" width="220" height="10" rx="5" fill="#475569"/>
+    <rect x="110" y="264" width="280" height="10" rx="5" fill="#475569"/>
+    <rect x="110" y="300" width="140" height="120" rx="14" fill="#5b21b6"/>
+    <rect x="270" y="300" width="220" height="56" rx="12" fill="#334155"/>
+    <rect x="270" y="368" width="180" height="52" rx="12" fill="#1e293b"/>
+    <rect x="510" y="190" width="170" height="230" rx="14" fill="#1e293b"/>
+    <rect x="530" y="210" width="130" height="10" rx="5" fill="#64748b"/>
+    <rect x="530" y="232" width="110" height="10" rx="5" fill="#64748b"/>
+    <rect x="530" y="254" width="120" height="10" rx="5" fill="#64748b"/>
+  </g>
+
+  <path d="M0 620 Q 400 520 800 660 L 800 800 L 0 800 Z" fill="#020617" opacity="0.45"/>
+  <rect width="800" height="800" fill="url(#shine)"/>
+</svg>
