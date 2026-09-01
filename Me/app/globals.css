@@ -180,6 +180,10 @@
     color: var(--nav-icon-hover);
   }
 
+  .nav-icon-btn-hover {
+    color: var(--nav-icon-hover);
+  }
+
   .nav-icon-highlight {
     position: absolute;
     inset: 0;

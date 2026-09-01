@@ -95,9 +95,28 @@ export function Navbar() {
   }, [showBottomNav]);
 
   const onNavClick = (href: string) => {
-    lockUntil.current = performance.now() + 1000;
     setActive(href);
     setHovered(null);
+    lockUntil.current = performance.now() + 2000;
+
+    const started = performance.now();
+    const release = () => {
+      const el = document.getElementById(href.slice(1));
+      if (!el || performance.now() - started > 2000) {
+        lockUntil.current = 0;
+        syncFromScroll();
+        return;
+      }
+      const header = document.querySelector("header");
+      const probe = (header?.getBoundingClientRect().bottom ?? 80) + 20;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= probe + 8 && rect.bottom > probe) {
+        lockUntil.current = 0;
+        return;
+      }
+      requestAnimationFrame(release);
+    };
+    requestAnimationFrame(release);
   };
 
   return (
@@ -123,7 +142,7 @@ export function Navbar() {
               {navLinks.map((link) => {
                 const Icon = iconMap[link.icon];
                 const isActive = active === link.href;
-                const isFocused = focused === link.href;
+                const isHovered = hovered === link.href;
                 return (
                   <a
                     key={link.href}
@@ -131,13 +150,17 @@ export function Navbar() {
                     aria-label={link.label}
                     aria-current={isActive ? "page" : undefined}
                     title={link.label}
-                    className={cn("nav-icon-btn", isFocused && "nav-icon-btn-active")}
+                    className={cn(
+                      "nav-icon-btn",
+                      isActive && "nav-icon-btn-active",
+                      isHovered && !isActive && "nav-icon-btn-hover"
+                    )}
                     onMouseEnter={() => setHovered(link.href)}
                     onFocus={() => setHovered(link.href)}
                     onBlur={() => setHovered(null)}
                     onClick={() => onNavClick(link.href)}
                   >
-                    {isFocused && (
+                    {isActive && (
                       <motion.span
                         layoutId="nav-highlight"
                         className="nav-icon-highlight"
@@ -145,9 +168,9 @@ export function Navbar() {
                       />
                     )}
                     {Icon && (
-                      <Icon className="h-[18px] w-[18px]" strokeWidth={isFocused ? 2.35 : 1.8} />
+                      <Icon className="h-[18px] w-[18px]" strokeWidth={isActive ? 2.35 : 1.8} />
                     )}
-                    {isFocused && (
+                    {isActive && (
                       <motion.span
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
