@@ -21,6 +21,26 @@ export const siteConfig = {
   instagram: "",
   bio: "Full Stack Developer, Software Engineer, and Mobile Developer with a background in Biotechnology and Artificial Intelligence. I build smart, scalable, high-performance web, mobile, and software solutions.",
   heroImage: "/bgimage.jpeg",
+  heroImages: [
+    {
+      src: "/hero-1.jpeg",
+      label: "SIZ presentation",
+      object: "object-[62%_40%] sm:object-[58%_38%] lg:object-[55%_42%]",
+      motion: "hero-photo-1",
+    },
+    {
+      src: "/hero-2.jpeg",
+      label: "Building in the lab",
+      object: "object-[46%_22%] sm:object-[48%_24%] lg:object-[50%_26%]",
+      motion: "hero-photo-2",
+    },
+    {
+      src: "/bgimage.jpeg",
+      label: "SOLTELCO hackathon",
+      object: "object-[38%_16%] sm:object-[40%_20%] lg:object-[46%_28%]",
+      motion: "hero-photo-3",
+    },
+  ],
   profileImage: "/profile.jpeg",
   cvPath: "/resumepindhe.pdf",
   hero: {
