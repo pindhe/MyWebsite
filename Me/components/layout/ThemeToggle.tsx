@@ -25,7 +25,7 @@ export function ThemeToggle() {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       aria-pressed={isDark}
       title={isDark ? "Light mode" : "Dark mode"}
-      className={cn("theme-toggle", isDark && "theme-toggle-dark")}
+      className={cn("theme-toggle", isDark ? "theme-toggle-dark" : "theme-toggle-light")}
     >
       <Sun
         className={cn(

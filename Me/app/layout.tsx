@@ -6,7 +6,7 @@ import "./globals.css";
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#050816" },
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f4fb" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -76,7 +76,10 @@ const themeScript = `
     var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
     var t=s==='light'||s==='dark'?s:(d?'dark':'light');
     document.documentElement.classList.add(t);
+    document.documentElement.dataset.theme=t;
     document.documentElement.style.colorScheme=t;
+    var m=document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', t==='dark'?'#050816':'#f6f4fb');
   } catch(e) { document.documentElement.classList.add('dark'); }
 })();
 `;

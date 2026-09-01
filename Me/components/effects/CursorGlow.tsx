@@ -28,11 +28,15 @@ export function CursorGlow() {
     };
   }, []);
 
-  if (!visible || !mounted || theme === "light") return null;
+  if (!visible || !mounted) return null;
 
   return (
     <motion.div
-      className="pointer-events-none fixed z-[9999] h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple/10 blur-[80px]"
+      className="pointer-events-none fixed z-[9999] h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
+      style={{
+        background:
+          theme === "dark" ? "rgba(124, 58, 237, 0.12)" : "rgba(109, 40, 217, 0.08)",
+      }}
       animate={{ left: pos.x, top: pos.y }}
       transition={{ type: "spring", damping: 30, stiffness: 200, mass: 0.5 }}
       aria-hidden

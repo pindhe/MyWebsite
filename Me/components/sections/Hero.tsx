@@ -131,7 +131,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate flex min-h-screen flex-col justify-center overflow-hidden pt-24 pb-28 sm:pb-32"
+      className="hero-cinematic relative isolate flex min-h-screen flex-col justify-center overflow-hidden pt-24 pb-28 sm:pb-32"
     >
       <HeroBackground />
 
@@ -217,7 +217,7 @@ export function Hero() {
               {siteConfig.hero.stack.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300"
+                  className="theme-chip rounded-full px-3 py-1 text-xs font-medium"
                 >
                   {tech}
                 </li>

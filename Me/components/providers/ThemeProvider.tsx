@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
-import { applyTheme, getInitialTheme, switchThemeFromPoint, type Theme } from "@/lib/theme";
+import { applyTheme, getInitialTheme, switchThemeFromPoint, themeStorageKey, type Theme } from "@/lib/theme";
 
 type ThemeOrigin = { x: number; y: number };
 
@@ -24,6 +24,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     applyTheme(initial);
     setThemeState(initial);
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => {
+      const stored = localStorage.getItem(themeStorageKey);
+      if (stored === "dark" || stored === "light") return;
+      const next = media.matches ? "dark" : "light";
+      applyTheme(next);
+      setThemeState(next);
+    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
   }, []);
 
   const setTheme = useCallback((next: Theme) => {

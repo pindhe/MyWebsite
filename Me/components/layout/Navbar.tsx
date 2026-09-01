@@ -115,7 +115,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="tap-fast inline-flex items-center gap-3 rounded-lg px-4 py-3 text-slate-300 hover:bg-purple/10 hover:text-white"
+                  className="tap-fast inline-flex items-center gap-3 rounded-lg px-4 py-3 text-[var(--text-secondary)] hover:bg-purple/10 hover:text-[var(--text-primary)]"
                 >
                   {Icon && <Icon className="h-5 w-5 text-purple-light" />}
                   {link.label}
