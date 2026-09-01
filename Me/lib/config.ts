@@ -22,6 +22,13 @@ export const siteConfig = {
   bio: "Full Stack Developer with a background in Biotechnology and Artificial Intelligence. I build smart, scalable web and mobile solutions that blend clean engineering with real-world impact.",
   heroImage: "/bgimage.jpeg",
   profileImage: "/image.jpeg",
+  hero: {
+    greeting: "Hello, I'm",
+    availability: "Available for hire",
+    speaker: "SOLTELCO Hackathon Speaker",
+    focus: "Web · Mobile · AI",
+    stack: ["Next.js", "React", "TypeScript", "Flutter", "FastAPI", "Python", "Laravel", "Figma"],
+  },
   stats: [
     { label: "Years Experience", value: 4, suffix: "+" },
     { label: "Projects Done", value: 30, suffix: "+" },
@@ -71,7 +78,7 @@ export const projects: Project[] = [
     features: ["Appointments", "Patient records", "FastAPI backend"],
     github: "https://github.com/pindhe/Qaahira_Dental_clini",
     stars: 44,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Automatic English College",
@@ -83,7 +90,7 @@ export const projects: Project[] = [
     features: ["Student portal", "Course management", "Admin dashboard"],
     github: "https://github.com/pindhe/Automatic-English-College",
     stars: 52,
-    updated: "May 2026",
+    updated: "May 2026",
   },
   {
     title: "Iqra College",
@@ -95,7 +102,7 @@ export const projects: Project[] = [
     features: ["College portal", "Student records", "Responsive design"],
     github: "https://github.com/pindhe/Iqra-College",
     stars: 44,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Water Billing System",
@@ -107,7 +114,7 @@ export const projects: Project[] = [
     features: ["Billing automation", "Customer accounts", "Usage reports"],
     github: "https://github.com/pindhe/Water-Billing-system",
     stars: 43,
-    updated: "Apr 2026",
+    updated: "Apr 2026",
   },
   {
     title: "Pharmacy Management System",
@@ -119,7 +126,7 @@ export const projects: Project[] = [
     features: ["Stock management", "Prescriptions", "Sales tracking"],
     github: "https://github.com/pindhe/Pharmacy-Management-system",
     stars: 43,
-    updated: "Apr 2026",
+    updated: "Apr 2026",
   },
   {
     title: "School Management System",
@@ -131,7 +138,7 @@ export const projects: Project[] = [
     features: ["JWT authentication", "Student management", "Tailwind UI"],
     github: "https://github.com/pindhe/School_management",
     stars: 9,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "ATU Events",
@@ -143,7 +150,7 @@ export const projects: Project[] = [
     features: ["Event listings", "Mobile app", "REST API"],
     github: "https://github.com/pindhe/ATU-EVENTS",
     stars: 20,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Fitness App",
@@ -155,7 +162,7 @@ export const projects: Project[] = [
     features: ["Workout tracking", "Firebase auth", "Cross-platform"],
     github: "https://github.com/pindhe/Fitness",
     stars: 19,
-    updated: "May 2026",
+    updated: "May 2026",
   },
   {
     title: "Somaliland Innovation Zone",
@@ -167,7 +174,7 @@ export const projects: Project[] = [
     features: ["Student registration", "Admin panel", "Data management"],
     github: "https://github.com/pindhe/Somaliland-Innovation-Zone",
     stars: 1,
-    updated: "Jul 2026",
+    updated: "Jul 2026",
   },
   {
     title: "Job Portal & Recruitment",
@@ -179,7 +186,7 @@ export const projects: Project[] = [
     features: ["Job listings", "Applications", "Employer dashboard"],
     github: "https://github.com/pindhe/Job-Portal-Recruitment-System",
     stars: 1,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Teletronic eCommerce",
@@ -191,7 +198,7 @@ export const projects: Project[] = [
     features: ["Product catalog", "Shopping cart", "Responsive store"],
     github: "https://github.com/pindhe/Teletronic_eCommerce",
     stars: 1,
-    updated: "Jul 2026",
+    updated: "Jul 2026",
   },
   {
     title: "AI Quiz Application",
@@ -203,7 +210,7 @@ export const projects: Project[] = [
     features: ["AI quizzes", "Firebase", "Score tracking"],
     github: "https://github.com/pindhe/Ai-Quize-application",
     stars: 17,
-    updated: "May 2026",
+    updated: "May 2026",
   },
   {
     title: "AI Birth Date",
@@ -215,7 +222,7 @@ export const projects: Project[] = [
     features: ["AI integration", "Tailwind UI", "Age calculator"],
     github: "https://github.com/pindhe/Ai-Birth-date",
     stars: 14,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Hargeisa Village",
@@ -227,7 +234,7 @@ export const projects: Project[] = [
     features: ["Community portal", "Records", "Local admin"],
     github: "https://github.com/pindhe/Hargeisa-Village",
     stars: 6,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Irshaad School",
@@ -239,7 +246,7 @@ export const projects: Project[] = [
     features: ["School portal", "Tailwind design", "Student info"],
     github: "https://github.com/pindhe/Irshaad_school",
     stars: 11,
-    updated: "Jun 2026",
+    updated: "Jun 2026",
   },
   {
     title: "Zaad Payment",
@@ -251,7 +258,7 @@ export const projects: Project[] = [
     features: ["Payment UI", "Zaad integration", "Responsive"],
     github: "https://github.com/pindhe/Zaad-payment",
     stars: 19,
-    updated: "May 2026",
+    updated: "May 2026",
   },
   {
     title: "Eng pindhe Portfolio",
@@ -263,7 +270,7 @@ export const projects: Project[] = [
     features: ["About me", "Project links", "GitHub Pages"],
     github: "https://github.com/pindhe/pindhe",
     stars: 48,
-    updated: "Jul 2026",
+    updated: "Jul 2026",
   },
 ];
 

@@ -290,6 +290,55 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  .hero-mobile-mesh {
+    background:
+      radial-gradient(ellipse 90% 50% at 10% 8%, rgba(124, 58, 237, 0.32), transparent 58%),
+      radial-gradient(ellipse 70% 40% at 100% 18%, rgba(59, 130, 246, 0.18), transparent 55%),
+      linear-gradient(180deg, rgba(2, 6, 23, 0.2) 0%, transparent 28%, rgba(2, 6, 23, 0.45) 100%);
+  }
+
+  .hero-mobile-art {
+    background-image: url("/hero/hero-mobile-bg.svg");
+    background-size: cover;
+    background-position: center top;
+  }
+
+  .hero-mobile-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(48px);
+    animation: aurora-float 9s ease-in-out infinite;
+  }
+
+  .hero-mobile-orb-a {
+    top: -8%;
+    left: -20%;
+    height: 240px;
+    width: 240px;
+    background: rgba(124, 58, 237, 0.35);
+  }
+
+  .hero-mobile-orb-b {
+    right: -18%;
+    bottom: 12%;
+    height: 200px;
+    width: 200px;
+    background: rgba(59, 130, 246, 0.22);
+    animation-duration: 11s;
+    animation-delay: -3s;
+  }
+
+  html.light .hero-mobile-mesh {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(248, 250, 252, 0.78) 0%,
+        rgba(248, 250, 252, 0.55) 42%,
+        rgba(238, 242, 255, 0.72) 100%
+      ),
+      radial-gradient(ellipse 80% 45% at 12% 10%, rgba(124, 58, 237, 0.14), transparent 60%);
+  }
+
   html.light .hero-bg-photo-overlay {
     background:
       linear-gradient(
@@ -374,11 +423,63 @@
   .spin-slow {
     animation: spin-ring 24s linear infinite;
   }
+
+  .hero-caret {
+    animation: caret-blink 1s steps(1) infinite;
+  }
+
+  .hero-portrait-ring {
+    padding: 3px;
+    border-radius: 2rem;
+    background: conic-gradient(
+      from var(--hero-ring-angle),
+      #7c3aed,
+      #3b82f6,
+      #a855f7,
+      #7c3aed
+    );
+    animation: hero-ring-spin 10s linear infinite;
+  }
+
+  .hero-available {
+    border-color: rgba(52, 211, 153, 0.25);
+    background: rgba(16, 185, 129, 0.12);
+    color: #6ee7b7;
+  }
+
+  html.light .hero-available {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: rgba(16, 185, 129, 0.1);
+    color: #047857;
+  }
+}
+
+@property --hero-ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
 
 @keyframes spin-ring {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-ring-spin {
+  to {
+    --hero-ring-angle: 360deg;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 
@@ -427,7 +528,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora-orb {
+  .aurora-orb,
+  .spin-slow,
+  .hero-float-sm,
+  .hero-float-lg,
+  .scroll-hint,
+  .hero-caret,
+  .hero-portrait-ring,
+  .hero-mobile-orb {
     animation: none;
   }
 

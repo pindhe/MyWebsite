@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="m-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="38%" stop-color="#0f172a"/>
+      <stop offset="72%" stop-color="#1e1145"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <radialGradient id="m-glow-top" cx="18%" cy="12%" r="52%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.62"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="m-glow-right" cx="92%" cy="28%" r="42%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="m-glow-mid" cx="50%" cy="48%" r="40%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="m-glow-bot" cx="78%" cy="88%" r="38%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="m-wave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#a78bfa" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="m-card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03"/>
+    </linearGradient>
+    <pattern id="m-grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M 72 0 L 0 0 0 72" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.07"/>
+    </pattern>
+    <pattern id="m-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.1" fill="#ffffff" opacity="0.10"/>
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#m-base)"/>
+  <rect width="1080" height="1920" fill="url(#m-glow-top)"/>
+  <rect width="1080" height="1920" fill="url(#m-glow-right)"/>
+  <rect width="1080" height="1920" fill="url(#m-glow-mid)"/>
+  <rect width="1080" height="1920" fill="url(#m-glow-bot)"/>
+  <rect width="1080" height="1920" fill="url(#m-grid)"/>
+  <rect width="1080" height="1920" fill="url(#m-dots)"/>
+
+  <g opacity="0.28" stroke="url(#m-wave)" stroke-width="2" fill="none">
+    <path d="M-40 420 C 180 300, 360 560, 560 430 S 880 310, 1120 470"/>
+    <path d="M-40 720 C 220 840, 480 620, 720 760 S 980 900, 1120 740"/>
+    <path d="M-40 1180 C 200 1060, 460 1280, 740 1160 S 980 1040, 1120 1200"/>
+  </g>
+
+  <g opacity="0.16" fill="none" stroke="#c4b5fd" stroke-width="1.2">
+    <circle cx="900" cy="240" r="120"/>
+    <circle cx="900" cy="240" r="78"/>
+    <circle cx="160" cy="1540" r="110"/>
+  </g>
+
+  <g opacity="0.22">
+    <rect x="72" y="1380" width="420" height="280" rx="28" fill="url(#m-card)"/>
+    <rect x="96" y="1408" width="180" height="14" rx="7" fill="#a78bfa"/>
+    <rect x="96" y="1440" width="280" height="10" rx="5" fill="#ffffff" opacity="0.25"/>
+    <rect x="96" y="1464" width="220" height="10" rx="5" fill="#ffffff" opacity="0.16"/>
+    <rect x="96" y="1510" width="120" height="88" rx="16" fill="#7c3aed" opacity="0.55"/>
+    <rect x="236" y="1510" width="200" height="88" rx="16" fill="#ffffff" opacity="0.08"/>
+  </g>
+
+  <g opacity="0.18">
+    <rect x="620" y="148" width="380" height="220" rx="24" fill="#0f172a"/>
+    <rect x="620" y="148" width="380" height="44" rx="24" fill="#1e293b"/>
+    <circle cx="652" cy="170" r="7" fill="#ef4444"/>
+    <circle cx="676" cy="170" r="7" fill="#eab308"/>
+    <circle cx="700" cy="170" r="7" fill="#22c55e"/>
+    <rect x="650" y="220" width="220" height="12" rx="6" fill="#7c3aed" opacity="0.7"/>
+    <rect x="650" y="248" width="300" height="10" rx="5" fill="#64748b"/>
+    <rect x="650" y="272" width="250" height="10" rx="5" fill="#475569"/>
+  </g>
+</svg>

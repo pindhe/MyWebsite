@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Download,
   Mail,
@@ -17,6 +17,7 @@ import {
   FolderKanban,
   Star,
   Clock,
+  ArrowRight,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 import { HeroBackground } from "@/components/effects/HeroBackground";
@@ -31,14 +32,62 @@ const socials = [
 
 const statIcons = [Briefcase, FolderKanban, Star, Clock];
 
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
+function useTypewriter(words: string[], enabled: boolean) {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState(enabled ? "" : (words[0] ?? ""));
+  const [phase, setPhase] = useState<"typing" | "deleting">("typing");
+
+  useEffect(() => {
+    if (!enabled) {
+      setDisplayText(words[0] ?? "");
+      return;
+    }
+
+    const role = words[roleIndex] ?? "";
+
+    if (phase === "typing") {
+      if (displayText.length < role.length) {
+        const timer = setTimeout(
+          () => setDisplayText(role.slice(0, displayText.length + 1)),
+          70
+        );
+        return () => clearTimeout(timer);
+      }
+      const timer = setTimeout(() => setPhase("deleting"), 2200);
+      return () => clearTimeout(timer);
+    }
+
+    if (displayText.length > 0) {
+      const timer = setTimeout(
+        () => setDisplayText(displayText.slice(0, -1)),
+        32
+      );
+      return () => clearTimeout(timer);
+    }
+
+    setRoleIndex((i) => (i + 1) % words.length);
+    setPhase("typing");
+  }, [displayText, phase, roleIndex, words, enabled]);
+
+  return displayText;
+}
+
+function AnimatedCounter({
+  target,
+  suffix = "",
+  reduceMotion,
+}: {
+  target: number;
+  suffix?: string;
+  reduceMotion: boolean | null;
+}) {
+  const [count, setCount] = useState(reduceMotion ? target : 0);
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    if (!started) return;
-    const duration = 2000;
-    const steps = 60;
+    if (reduceMotion || !started) return;
+    const duration = 1800;
+    const steps = 48;
     const increment = target / steps;
     let current = 0;
     const timer = setInterval(() => {
@@ -51,7 +100,16 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
       }
     }, duration / steps);
     return () => clearInterval(timer);
-  }, [target, started]);
+  }, [target, started, reduceMotion]);
+
+  if (reduceMotion) {
+    return (
+      <span>
+        {target}
+        {suffix}
+      </span>
+    );
+  }
 
   return (
     <motion.span
@@ -67,93 +125,79 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 }
 
 export function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const role = siteConfig.roles[roleIndex];
-    const timeout = setTimeout(
-      () => {
-        if (!deleting) {
-          if (displayText.length < role.length) {
-            setDisplayText(role.slice(0, displayText.length + 1));
-          } else {
-            setTimeout(() => setDeleting(true), 2200);
-          }
-        } else if (displayText.length > 0) {
-          setDisplayText(displayText.slice(0, -1));
-        } else {
-          setDeleting(false);
-          setRoleIndex((i) => (i + 1) % siteConfig.roles.length);
-        }
-      },
-      deleting ? 35 : 75
-    );
-    return () => clearTimeout(timeout);
-  }, [displayText, deleting, roleIndex]);
+  const reduceMotion = useReducedMotion();
+  const displayText = useTypewriter(siteConfig.roles, !reduceMotion);
 
   return (
-    <section id="home" className="relative isolate flex min-h-screen flex-col justify-center overflow-hidden pt-24 pb-32">
+    <section
+      id="home"
+      className="relative isolate flex min-h-screen flex-col justify-center overflow-hidden pt-24 pb-28 sm:pb-32"
+    >
       <HeroBackground />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          {/* Left — Content */}
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-purple/30 bg-purple/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-light">
+            <div className="mb-6 flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-purple/30 bg-purple/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-light">
                 <Sparkles className="h-3.5 w-3.5" />
-                Hello, I&apos;m
+                {siteConfig.hero.greeting}
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs text-slate-400">
                 <MapPin className="h-3.5 w-3.5 text-purple-light" />
                 {siteConfig.location}
               </span>
+              <span className="hero-available inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                {siteConfig.hero.availability}
+              </span>
             </div>
 
-            <h1 className="font-heading text-[2.75rem] font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="font-display text-[2.85rem] font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
               Eng{" "}
-              <span className="gradient-text">pindhe</span>
+              <span className="gradient-text">{siteConfig.shortName.replace(/^Eng\s+/i, "")}</span>
             </h1>
 
-            <div className="mt-5 flex min-h-[2.75rem] items-center font-heading text-xl font-semibold sm:text-2xl lg:text-3xl">
+            <p className="sr-only">{siteConfig.roles.join(", ")}</p>
+            <div
+              className="mt-4 flex min-h-[2.5rem] items-center font-heading text-xl font-semibold sm:text-2xl lg:text-[1.75rem]"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <span className="gradient-text">{displayText}</span>
-              <span className="ml-0.5 inline-block h-7 w-0.5 animate-pulse bg-purple-bright sm:h-8" />
+              <span className="hero-caret ml-1 inline-block h-6 w-[2px] bg-purple-bright sm:h-7" />
             </div>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
               {siteConfig.bio}
             </p>
+            <p className="mt-2 text-sm font-medium tracking-wide text-purple-light">
+              {siteConfig.hero.focus}
+            </p>
 
-            {/* Icon-only action buttons */}
-            <div className="mt-8 flex items-center gap-3">
-              <CVLink className="btn-primary !h-12 !w-12 !p-0 shadow-glow">
-                <Download className="h-5 w-5" />
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <CVLink className="btn-primary !px-5 shadow-glow">
+                <Download className="h-4 w-4" />
+                Download CV
               </CVLink>
-              <a
-                href="#contact"
-                aria-label="Hire Me"
-                title="Hire Me"
-                className="btn-outline !h-12 !w-12 !p-0"
-              >
-                <Handshake className="h-5 w-5" />
+              <a href="#contact" className="btn-outline !px-5">
+                <Handshake className="h-4 w-4" />
+                Hire me
               </a>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                aria-label="Contact"
-                title="Contact"
-                className="btn-outline !h-12 !w-12 !p-0"
-              >
-                <Mail className="h-5 w-5" />
+              <a href="#projects" className="btn-outline !px-5">
+                View work
+                <ArrowRight className="h-4 w-4" />
               </a>
+            </div>
 
-              <span className="mx-1 h-8 w-px bg-white/10" aria-hidden />
-
+            <div className="mt-5 flex items-center gap-2">
               {socials.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
@@ -168,83 +212,104 @@ export function Hero() {
                 </a>
               ))}
             </div>
+
+            <ul className="mt-7 flex flex-wrap gap-2" aria-label="Core stack">
+              {siteConfig.hero.stack.map((tech) => (
+                <li
+                  key={tech}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300"
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
           </motion.div>
 
-          {/* Right — Profile visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto flex w-full max-w-md justify-center lg:max-w-none"
+            transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto hidden w-full max-w-md justify-center lg:flex lg:max-w-none"
           >
             <div className="relative">
-              {/* Glow behind card */}
               <div className="absolute inset-0 scale-110 rounded-[2rem] bg-purple/20 blur-[60px]" />
-
-              {/* Rotating ring */}
               <div className="spin-slow absolute -inset-5 rounded-[2.5rem] border border-dashed border-purple/25" />
 
-              {/* Main profile card */}
-              <div className="glass-card relative aspect-[4/5] w-72 overflow-hidden rounded-[2rem] border border-white/15 shadow-glow sm:w-80 lg:w-[22rem]">
-                <Image
-                  src={siteConfig.profileImage}
-                  alt={siteConfig.name}
-                  fill
-                  priority
-                  quality={90}
-                  sizes="(max-width:768px) 288px, 352px"
-                  className="object-cover object-[center_22%] grayscale-[15%] contrast-[1.05]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/25 to-purple/5" />
-                <div className="hero-profile-text absolute inset-x-0 bottom-0 p-5">
-                  <p className="font-heading text-lg font-bold text-white">Eng pindhe</p>
-                  <p className="text-sm text-slate-300">Software Engineer</p>
-                  <span className="mt-2 inline-flex rounded-full border border-purple/30 bg-purple/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-purple-light backdrop-blur-sm">
-                    SOLTELCO Hackathon Speaker
-                  </span>
+              <div className="hero-portrait-ring relative">
+                <div className="glass-card relative aspect-[4/5] w-72 overflow-hidden rounded-[1.85rem] border-0 shadow-glow sm:w-80 lg:w-[22rem]">
+                  <Image
+                    src={siteConfig.profileImage}
+                    alt={siteConfig.name}
+                    fill
+                    priority
+                    quality={90}
+                    sizes="(max-width:768px) 288px, 352px"
+                    className="object-cover object-[center_22%] grayscale-[12%] contrast-[1.05]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-purple/5" />
+                  <div className="hero-profile-text absolute inset-x-0 bottom-0 hidden p-5 lg:block">
+                    <p className="font-heading text-lg font-bold text-white">
+                      {siteConfig.shortName}
+                    </p>
+                    <p className="text-sm text-slate-300">{siteConfig.roles[0]}</p>
+                    <span className="mt-2 inline-flex rounded-full border border-purple/30 bg-purple/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-purple-light backdrop-blur-sm">
+                      {siteConfig.hero.speaker}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Status badge */}
-              <div className="hero-float-sm absolute -bottom-3 -right-2 flex items-center gap-2 rounded-full border border-white/10 bg-surface/90 px-4 py-2 text-sm shadow-glass backdrop-blur-xl sm:-right-4">
+              <div className="hero-float-sm absolute -bottom-3 -right-2 hidden items-center gap-2 rounded-full border border-white/10 bg-surface/90 px-4 py-2 text-sm shadow-glass backdrop-blur-xl lg:flex lg:-right-4">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
                 </span>
-                <span className="font-medium text-slate-200">Available for hire</span>
+                <span className="font-medium text-slate-200">{siteConfig.hero.availability}</span>
               </div>
 
-              {/* Floating accent card */}
               <div className="hero-float-lg absolute -left-4 top-8 hidden rounded-2xl glass px-4 py-3 sm:block lg:-left-8">
                 <p className="text-xs text-slate-400">Experience</p>
-                <p className="font-heading text-lg font-bold gradient-text">4+ Years</p>
+                <p className="font-heading text-lg font-bold gradient-text">
+                  {siteConfig.stats[0].value}
+                  {siteConfig.stats[0].suffix} Years
+                </p>
+              </div>
+
+              <div className="hero-float-sm absolute -right-2 top-16 hidden rounded-2xl glass px-3 py-2 text-xs font-medium text-slate-200 sm:block lg:-right-6">
+                {siteConfig.hero.stack[0]}
+              </div>
+              <div className="hero-float-lg absolute bottom-24 -left-2 hidden rounded-2xl glass px-3 py-2 text-xs font-medium text-slate-200 sm:block lg:-left-6">
+                {siteConfig.hero.stack[3]}
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Stats row */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.6 }}
-          className="mt-16 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
+          transition={{ delay: 0.4, duration: 0.55 }}
+          className="mt-14 grid grid-cols-2 gap-3 sm:mt-16 sm:gap-4 lg:grid-cols-4"
         >
           {siteConfig.stats.map((stat, i) => {
             const Icon = statIcons[i] ?? Briefcase;
             return (
               <div
                 key={stat.label}
-                className="group glass-card flex items-center gap-4 p-4 sm:p-5"
+                className="group glass-card flex min-w-0 items-center gap-3 p-3.5 sm:gap-4 sm:p-5"
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple/15 text-purple-light transition-colors group-hover:bg-purple/25">
                   <Icon className="h-5 w-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="font-heading text-xl font-bold gradient-text sm:text-2xl">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                    <AnimatedCounter
+                      target={stat.value}
+                      suffix={stat.suffix}
+                      reduceMotion={reduceMotion}
+                    />
                   </p>
-                  <p className="text-xs text-slate-400 sm:text-sm">{stat.label}</p>
+                  <p className="text-[11px] leading-tight text-slate-400 sm:text-sm">{stat.label}</p>
                 </div>
               </div>
             );
@@ -252,7 +317,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll hint */}
       <a
         href="#about"
         className="scroll-hint tap-fast absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-slate-500 hover:text-purple-light"
