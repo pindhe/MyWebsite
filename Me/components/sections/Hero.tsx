@@ -243,12 +243,9 @@ export function Hero() {
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
               {siteConfig.bio}
             </p>
-            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:justify-start sm:gap-5">
-              <p className="text-sm font-medium tracking-wide text-purple-light">
-                {siteConfig.hero.focus}
-              </p>
-              <JoinPindhe />
-            </div>
+            <p className="mt-2 text-sm font-medium tracking-wide text-purple-light">
+              {siteConfig.hero.focus}
+            </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <CVLink className="btn-primary !px-5 shadow-glow">
@@ -280,6 +277,8 @@ export function Hero() {
                 </a>
               ))}
             </div>
+
+            <JoinPindhe />
           </motion.div>
 
           <motion.div
