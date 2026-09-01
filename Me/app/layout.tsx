@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: siteConfig.url },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/logo.jpg", apple: "/logo.jpg" },
 };
 
 const jsonLd = {

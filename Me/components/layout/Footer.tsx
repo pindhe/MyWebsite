@@ -1,4 +1,5 @@
 import { Github, Linkedin, Mail, MessageCircle } from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { navLinks, siteConfig } from "@/lib/config";
 
 const socials = [
@@ -14,9 +15,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-heading text-lg font-bold">
-              Eng Nour H. <span className="gradient-text">pindhe</span>
-            </p>
+            <a href="#home" className="inline-flex" aria-label={siteConfig.shortName}>
+              <BrandLogo size={52} />
+            </a>
             <p className="mt-3 text-sm text-slate-400">{siteConfig.bio.slice(0, 100)}...</p>
           </div>
           <div>

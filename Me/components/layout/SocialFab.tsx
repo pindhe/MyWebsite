@@ -16,7 +16,7 @@ export function SocialFab() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3">
+    <div className="fab-dock fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 transition-[bottom] duration-200">
       {open &&
         links.map((link, i) => (
           <a

@@ -24,39 +24,42 @@ export function HeroBackground() {
   return (
     <>
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden>
-        {slides.map((slide, i) => (
-          <Image
-            key={slide.src}
-            src={slide.src}
-            alt=""
-            fill
-            priority={i === 0}
-            quality={90}
-            sizes="100vw"
-            className={cn(
-              "hero-bg-layer object-cover transition-opacity duration-1000 ease-out",
-              slide.object,
-              slide.motion,
-              i === index ? "opacity-100" : "opacity-0"
-            )}
-          />
-        ))}
+        <div className="hero-bg-frame">
+          {slides.map((slide, i) => (
+            <Image
+              key={slide.src}
+              src={slide.src}
+              alt=""
+              fill
+              priority={i === 0}
+              quality={90}
+              sizes="100vw"
+              className={cn(
+                "hero-bg-layer object-cover transition-opacity duration-1000 ease-out",
+                slide.object,
+                slide.motion,
+                i === index ? "opacity-100" : "opacity-0"
+              )}
+            />
+          ))}
 
-        <div className="hero-bg-layer hero-photo-grade" />
-        <div className="hero-bg-layer hero-bg-photo-overlay-mobile lg:hidden" />
-        <div className="hero-bg-layer hero-bg-photo-overlay hidden lg:block" />
-        <div className="hero-bg-layer hero-bg-vignette" />
-        <div
-          className="hero-bg-layer opacity-40 lg:opacity-70"
-          style={{
-            backgroundImage: "url('/hero/hero-grid.svg')",
-            backgroundSize: "cover",
-          }}
-        />
-        <div className="hero-bg-layer hero-bg-noise" />
+          <div className="hero-bg-layer hero-photo-grade" />
+          <div className="hero-bg-layer hero-bg-photo-overlay-mobile lg:hidden" />
+          <div className="hero-bg-layer hero-bg-photo-overlay hidden lg:block" />
+          <div className="hero-bg-layer hero-bg-vignette" />
+          <div
+            className="hero-bg-layer opacity-30 lg:opacity-70"
+            style={{
+              backgroundImage: "url('/hero/hero-grid.svg')",
+              backgroundSize: "cover",
+            }}
+          />
+          <div className="hero-bg-layer hero-bg-noise" />
+        </div>
+        <div className="hero-mobile-bg-tail lg:hidden" />
       </div>
 
-      <div className="absolute bottom-24 right-4 z-20 flex items-center gap-2 sm:bottom-10 sm:right-8">
+      <div className="hero-slide-dots">
         {slides.map((slide, i) => (
           <button
             key={slide.src}

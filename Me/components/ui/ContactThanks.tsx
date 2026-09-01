@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const SHOW_MS = 5500;
 
@@ -65,6 +66,7 @@ export function ContactThanks({ open, onClose }: ContactThanksProps) {
             exit={{ opacity: 0, scale: 0.94, y: 10 }}
             transition={{ type: "spring", stiffness: 240, damping: 20 }}
           >
+            <BrandLogo size={56} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               key={playKey}

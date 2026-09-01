@@ -3,28 +3,50 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const WELCOME_KEY = "eng-pindhe-welcome";
 const ANIM_MS = 8217;
-const FADE_MS = 0.55;
+const HOLD_MS = 650;
+const FADE_MS = 0.7;
 
 export function PageLoader() {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem(WELCOME_KEY);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (seen || reduce) {
+    if (reduce) {
       setShow(false);
       return;
     }
 
-    sessionStorage.setItem(WELCOME_KEY, "1");
     document.documentElement.style.overflow = "hidden";
+    window.scrollTo({ top: 0 });
 
-    const timer = window.setTimeout(() => setShow(false), ANIM_MS);
+    let cancelled = false;
+    let started = false;
+    let timer: number | undefined;
+    const img = document.querySelector<HTMLImageElement>(".welcome-intro-mark");
+
+    const finish = () => {
+      if (cancelled) return;
+      setShow(false);
+    };
+
+    const start = () => {
+      if (cancelled || started) return;
+      started = true;
+      timer = window.setTimeout(finish, ANIM_MS + HOLD_MS);
+    };
+
+    if (img?.complete && img.naturalWidth > 0) {
+      start();
+    } else {
+      img?.addEventListener("load", start, { once: true });
+      timer = window.setTimeout(start, 300);
+    }
+
     return () => {
-      window.clearTimeout(timer);
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+      img?.removeEventListener("load", start);
       document.documentElement.style.overflow = "";
     };
   }, []);
@@ -32,6 +54,7 @@ export function PageLoader() {
   useEffect(() => {
     if (!show) {
       document.documentElement.style.overflow = "";
+      window.scrollTo({ top: 0 });
     }
   }, [show]);
 
@@ -48,11 +71,7 @@ export function PageLoader() {
           className="welcome-intro"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/welcome.svg"
-            alt="Welcome"
-            className="welcome-intro-mark"
-          />
+          <img src="/welcome.svg" alt="Welcome" className="welcome-intro-mark" />
         </motion.div>
       )}
     </AnimatePresence>

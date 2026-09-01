@@ -194,6 +194,76 @@
     z-index: 1;
   }
 
+  .nav-action-btn {
+    @apply tap-fast inline-flex h-10 items-center justify-center gap-1.5 rounded-xl px-3 text-xs font-semibold sm:px-3.5;
+  }
+
+  .nav-action-btn.btn-outline,
+  .nav-action-btn.btn-primary {
+    height: 2.5rem;
+    min-width: 2.5rem;
+  }
+
+  .nav-bottom {
+    @apply pointer-events-none fixed inset-x-0 bottom-0 z-50 flex translate-y-[120%] items-stretch gap-0 px-2 pb-[max(0.4rem,env(safe-area-inset-bottom))] pt-1.5 opacity-0 lg:hidden;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    border-top: 1px solid var(--border-default);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 -12px 40px rgba(2, 6, 23, 0.28);
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.22s ease;
+  }
+
+  .nav-bottom-show {
+    @apply pointer-events-auto translate-y-0 opacity-100;
+  }
+
+  .nav-bottom-btn {
+    @apply relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1.5 text-[9px] font-semibold leading-none;
+    color: var(--nav-icon);
+  }
+
+  .nav-bottom-btn span {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-bottom-btn svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-bottom-btn-active {
+    color: var(--nav-icon-hover);
+  }
+
+  .nav-bottom-highlight {
+    position: absolute;
+    inset: 4px 2px;
+    z-index: 0;
+    border-radius: 0.85rem;
+    background: color-mix(in srgb, var(--nav-icon-hover) 18%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--nav-icon-hover) 28%, transparent);
+  }
+
+  html[data-bottom-nav="1"] .fab-dock,
+  html[data-bottom-nav="1"] .back-to-top {
+    bottom: 5.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    html[data-bottom-nav="1"] .fab-dock,
+    html[data-bottom-nav="1"] .back-to-top {
+      bottom: 1.5rem;
+    }
+  }
+
   .nav-icon-name {
     position: absolute;
     top: calc(100% + 8px);
@@ -365,6 +435,40 @@
     @apply absolute inset-0;
   }
 
+  .hero-bg-frame {
+    @apply absolute inset-x-0 top-0;
+    height: 100svh;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-bg-frame {
+      inset: 0;
+      height: 100%;
+    }
+  }
+
+  .hero-mobile-bg-tail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 58svh;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--bg-base) 38%, var(--bg-base) 100%);
+  }
+
+  .hero-slide-dots {
+    @apply absolute right-4 z-20 flex items-center gap-2;
+    top: calc(100svh - 8.75rem);
+  }
+
+  @media (min-width: 640px) {
+    .hero-slide-dots {
+      right: 2rem;
+      top: auto;
+      bottom: 2.5rem;
+    }
+  }
+
   .hero-bg-photo-overlay {
     background:
       linear-gradient(
@@ -382,18 +486,18 @@
     background:
       linear-gradient(
         180deg,
-        rgba(2, 6, 23, 0.86) 0%,
-        rgba(2, 6, 23, 0.62) 36%,
-        rgba(2, 6, 23, 0.42) 62%,
-        rgba(2, 6, 23, 0.9) 100%
+        rgba(2, 6, 23, 0.58) 0%,
+        rgba(2, 6, 23, 0.38) 28%,
+        rgba(2, 6, 23, 0.22) 52%,
+        rgba(2, 6, 23, 0.72) 100%
       ),
       linear-gradient(
-        105deg,
-        rgba(2, 6, 23, 0.45) 0%,
-        rgba(2, 6, 23, 0.12) 48%,
-        transparent 72%
+        90deg,
+        rgba(2, 6, 23, 0.42) 0%,
+        rgba(2, 6, 23, 0.12) 55%,
+        transparent 100%
       ),
-      radial-gradient(ellipse 100% 48% at 50% -8%, rgba(124, 58, 237, 0.34), transparent 58%);
+      radial-gradient(ellipse 100% 48% at 50% -8%, rgba(124, 58, 237, 0.22), transparent 58%);
   }
 
   .hero-photo-grade {
@@ -401,21 +505,35 @@
   }
 
   .hero-photo-1 {
-    transform-origin: 62% 40%;
-    animation: hero-anim-1 18s ease-in-out infinite alternate;
-    will-change: transform;
+    transform-origin: 78% 30%;
   }
 
   .hero-photo-2 {
-    transform-origin: 48% 28%;
-    animation: hero-anim-2 20s ease-in-out infinite alternate;
-    will-change: transform;
+    transform-origin: 36% 32%;
   }
 
   .hero-photo-3 {
-    transform-origin: 38% 18%;
-    animation: hero-anim-3 22s ease-in-out infinite alternate;
-    will-change: transform;
+    transform-origin: 40% 40%;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-photo-1 {
+      transform-origin: 58% 42%;
+      animation: hero-anim-1 18s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    .hero-photo-2 {
+      transform-origin: 48% 26%;
+      animation: hero-anim-2 20s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    .hero-photo-3 {
+      transform-origin: 46% 30%;
+      animation: hero-anim-3 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
   }
 
   .hero-slide-dot {
@@ -447,6 +565,14 @@
     background:
       linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.35) 75%, var(--bg-base) 100%),
       linear-gradient(0deg, rgba(2, 6, 23, 0.45) 0%, transparent 28%);
+  }
+
+  @media (max-width: 1023px) {
+    .hero-bg-vignette {
+      background:
+        linear-gradient(180deg, transparent 42%, rgba(2, 6, 23, 0.22) 78%, var(--bg-base) 100%),
+        linear-gradient(0deg, rgba(2, 6, 23, 0.22) 0%, transparent 18%);
+    }
   }
 
   .hero-bg-noise {
@@ -508,12 +634,13 @@
     background:
       linear-gradient(
         180deg,
-        rgba(5, 8, 22, 0.82) 0%,
-        rgba(5, 8, 22, 0.55) 38%,
-        rgba(5, 8, 22, 0.38) 64%,
-        rgba(5, 8, 22, 0.88) 100%
+        rgba(5, 8, 22, 0.52) 0%,
+        rgba(5, 8, 22, 0.34) 30%,
+        rgba(5, 8, 22, 0.2) 54%,
+        rgba(5, 8, 22, 0.7) 100%
       ),
-      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(124, 58, 237, 0.22), transparent 55%);
+      linear-gradient(90deg, rgba(5, 8, 22, 0.38) 0%, rgba(5, 8, 22, 0.1) 58%, transparent 100%),
+      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(124, 58, 237, 0.18), transparent 55%);
   }
 
   html.light .hero-photo-grade {
@@ -561,17 +688,48 @@
 
   .section-padding {
     @apply py-20 md:py-28;
+    scroll-margin-top: 5.5rem;
   }
 
+  @media (max-width: 1023px) {
+    main {
+      padding-bottom: 4.75rem;
+    }
+  }
+
+  .page-loader,
   .welcome-intro {
-    @apply fixed inset-0 z-[200] flex items-center justify-center px-6;
+    @apply fixed inset-0 z-[200] flex flex-col items-center justify-center gap-5 px-6;
     background: var(--bg-base);
   }
 
   .welcome-intro-mark {
     width: min(92vw, 980px);
     height: auto;
-    max-height: 42vh;
+    max-height: 46vh;
+  }
+
+  .page-loader-mark {
+    width: min(46vw, 168px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .page-loader-title {
+    @apply font-heading text-2xl font-bold tracking-tight sm:text-3xl;
+    color: var(--text-primary);
+  }
+
+  .brand-logo {
+    border-radius: 0.7rem;
+    object-fit: cover;
+    background: #ebebe9;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .page-loader-logo {
+    width: 88px;
+    height: 88px;
   }
 
   .contact-thanks {

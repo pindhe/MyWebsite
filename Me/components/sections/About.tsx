@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CVLink } from "@/components/ui/CVLink";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { siteConfig } from "@/lib/config";
 import {
   Target,
@@ -86,8 +87,11 @@ export function About() {
               </div>
 
               <div className="relative -mt-10 px-5 pb-6 pt-0 text-center sm:px-6">
+                <div className="mb-3 flex justify-center">
+                  <BrandLogo size={56} />
+                </div>
                 <h3 className="font-heading text-xl font-bold sm:text-2xl">
-                  Eng <span className="gradient-text">pindhe</span>
+                  {siteConfig.hero.displayName}
                 </h3>
                 <p className="mt-1 text-sm text-purple-light">{siteConfig.roles[0]}</p>
 

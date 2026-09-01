@@ -25,23 +25,24 @@ export const siteConfig = {
     {
       src: "/hero-1.jpeg",
       label: "SIZ presentation",
-      object: "object-[62%_40%] sm:object-[58%_38%] lg:object-[55%_42%]",
+      object: "object-[78%_30%] sm:object-[70%_34%] lg:object-[58%_42%]",
       motion: "hero-photo-1",
     },
     {
       src: "/hero-2.jpeg",
       label: "Building in the lab",
-      object: "object-[46%_22%] sm:object-[48%_24%] lg:object-[50%_26%]",
+      object: "object-[36%_32%] sm:object-[42%_28%] lg:object-[48%_26%]",
       motion: "hero-photo-2",
     },
     {
       src: "/bgimage.jpeg",
       label: "SOLTELCO hackathon",
-      object: "object-[38%_16%] sm:object-[40%_20%] lg:object-[46%_28%]",
+      object: "object-[40%_40%] sm:object-[42%_36%] lg:object-[46%_30%]",
       motion: "hero-photo-3",
     },
   ],
   profileImage: "/profile.jpeg",
+  logo: "/logo.jpg",
   cvPath: "/resumepindhe.pdf",
   hero: {
     greeting: "Hello, I'm",
@@ -494,12 +495,12 @@ export const education: EducationEntry[] = [
 
 export const navLinks = [
   { href: "#home", label: "Home", icon: "Home" },
-  { href: "#about", label: "About", icon: "User" },
-  { href: "#skills", label: "Skills", icon: "Code2" },
+  { href: "#about", label: "About", icon: "UserRound" },
+  { href: "#skills", label: "Skills", icon: "CodeXml" },
   { href: "#projects", label: "Projects", icon: "FolderKanban" },
-  { href: "#services", label: "Services", icon: "Layers" },
+  { href: "#services", label: "Services", icon: "Sparkles" },
   { href: "#experience", label: "Experience", icon: "Briefcase" },
-  { href: "#contact", label: "Contact", icon: "Mail" },
+  { href: "#contact", label: "Contact", icon: "Send" },
 ];
 
 export const projectFilters: { id: ProjectCategory; label: string }[] = [
