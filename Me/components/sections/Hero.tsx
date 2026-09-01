@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { HeroBackground } from "@/components/effects/HeroBackground";
 import { CVLink } from "@/components/ui/CVLink";
 
-const JOIN_KEY = "eng-pindhe-joins";
+const JOINED_KEY = "eng-pindhe-joined";
 
 function formatJoinCount(n: number) {
   if (n < 1000) return `${n}+`;
@@ -36,34 +36,63 @@ function JoinPindhe() {
   const [count, setCount] = useState(1);
   const [liked, setLiked] = useState(false);
   const [bursts, setBursts] = useState<{ id: number }[]>([]);
+  const posting = useRef(false);
 
   useEffect(() => {
     try {
-      const stored = Number(localStorage.getItem(JOIN_KEY));
-      if (Number.isFinite(stored) && stored >= 1) setCount(stored);
-      if (localStorage.getItem(`${JOIN_KEY}-liked`) === "1") setLiked(true);
+      if (localStorage.getItem(JOINED_KEY) === "1") setLiked(true);
     } catch {
       /* ignore */
     }
+
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/joins", { cache: "no-store" });
+        const data = (await res.json()) as { count?: number; joined?: boolean };
+        if (!cancelled && typeof data.count === "number") setCount(Math.max(1, data.count));
+        if (!cancelled && data.joined) setLiked(true);
+      } catch {
+        /* keep current */
+      }
+    };
+
+    load();
+    const timer = window.setInterval(load, 12000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
   }, []);
 
-  const onLove = () => {
-    setCount((n) => {
-      const next = n + 1;
-      try {
-        localStorage.setItem(JOIN_KEY, String(next));
-        localStorage.setItem(`${JOIN_KEY}-liked`, "1");
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
-    setLiked(true);
+  const playBurst = () => {
     const id = Date.now() + Math.random();
     setBursts((current) => [...current, { id }]);
     window.setTimeout(() => {
       setBursts((current) => current.filter((burst) => burst.id !== id));
     }, 900);
+  };
+
+  const onLove = async () => {
+    playBurst();
+    setLiked(true);
+    if (posting.current) return;
+    posting.current = true;
+    try {
+      localStorage.setItem(JOINED_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      const res = await fetch("/api/joins", { method: "POST" });
+      const data = (await res.json()) as { count?: number };
+      if (typeof data.count === "number") setCount(Math.max(1, data.count));
+    } catch {
+      /* keep current */
+    } finally {
+      posting.current = false;
+    }
   };
 
   return (
