@@ -428,7 +428,7 @@
   }
 
   .hero-join {
-    @apply flex flex-wrap items-center gap-2.5;
+    @apply mt-7 flex flex-wrap items-center gap-3;
   }
 
   .hero-join-copy {
