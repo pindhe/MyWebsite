@@ -39,12 +39,10 @@ export function Navbar() {
   const [active, setActive] = useState("#home");
   const [hovered, setHovered] = useState<string | null>(null);
   const lockUntil = useRef(0);
-  const focused = hovered ?? active;
   const showBottomNav = scrolled;
 
   const syncFromScroll = useCallback(() => {
-    const y = window.scrollY;
-    setScrolled(y > 24);
+    setScrolled(window.scrollY > 24);
     if (performance.now() < lockUntil.current) return;
     const next = getActiveSectionHash(hashes);
     setActive((current) => (current === next ? current : next));
@@ -63,10 +61,20 @@ export function Navbar() {
     syncFromScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-    const late = [800, 2000].map((ms) => window.setTimeout(syncFromScroll, ms));
+    window.addEventListener("hashchange", onScroll);
+    window.addEventListener("scrollend", onScroll);
+    const main = document.querySelector("main");
+    const observer = main
+      ? new MutationObserver(() => syncFromScroll())
+      : null;
+    observer?.observe(main as Element, { childList: true, subtree: true });
+    const late = [400, 1200, 2500].map((ms) => window.setTimeout(syncFromScroll, ms));
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("hashchange", onScroll);
+      window.removeEventListener("scrollend", onScroll);
+      observer?.disconnect();
       late.forEach((id) => window.clearTimeout(id));
     };
   }, [syncFromScroll]);

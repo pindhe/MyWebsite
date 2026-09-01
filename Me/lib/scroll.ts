@@ -32,27 +32,37 @@ export function initSmoothAnchors() {
   return () => document.removeEventListener("click", onClick);
 }
 
-/** Section whose heading has crossed the spy line (below the fixed navbar). */
+/** Section currently under the navbar (the one the page is on). */
 export function getActiveSectionHash(hashes: string[]): string {
   if (hashes.length === 0) return "#home";
 
-  const scrollY = window.scrollY;
   const viewport = window.innerHeight;
-  const docHeight = document.documentElement.scrollHeight;
-  const offset = Math.max(88, Math.round(viewport * 0.22));
+  const scrollY = window.scrollY;
+  const docHeight = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight
+  );
 
-  if (scrollY + viewport >= docHeight - 64) {
+  if (scrollY + viewport >= docHeight - 72) {
     return hashes[hashes.length - 1] ?? "#home";
   }
 
+  const header = document.querySelector("header");
+  const probe = Math.round((header?.getBoundingClientRect().bottom ?? 80) + 20);
+
   let current = hashes[0] ?? "#home";
+
   for (const hash of hashes) {
     const el = document.getElementById(hash.slice(1));
     if (!el) continue;
-    const top = el.getBoundingClientRect().top + scrollY;
-    if (top - offset <= scrollY + 1) {
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= probe && rect.bottom > probe) {
+      return hash;
+    }
+    if (rect.top <= probe) {
       current = hash;
     }
   }
+
   return current;
 }
