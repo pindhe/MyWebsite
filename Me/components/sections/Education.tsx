@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 export function Education() {
   const completed = education.filter((e) => e.status === "Completed").length;
   const inProgress = education.filter((e) => e.status === "In Progress").length;
+  const institutions = new Set(education.map((e) => e.school)).size;
 
   return (
     <section id="education" className="section-padding bg-surface/30">
@@ -23,16 +24,16 @@ export function Education() {
         <SectionHeader
           tag="Education"
           title="Academic Background"
-          subtitle="Real qualifications from institutions in Hargeisa and Somaliland — backed by GitHub project proof."
+          subtitle="Degrees, diplomas, and training from Abaarso Tech, Tanaad College, Iqra College, Somaliland Innovation Zone, Coursera, and Alison."
         />
 
         {/* Summary */}
         <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
-            { label: "Institutions", value: education.length },
+            { label: "Programs", value: education.length },
             { label: "Completed", value: completed },
             { label: "In Progress", value: inProgress },
-            { label: "Location", value: "Somaliland" },
+            { label: "Institutions", value: institutions },
           ].map((s) => (
             <div key={s.label} className="glass-card p-4 text-center">
               <p className="font-heading text-xl font-bold gradient-text">{s.value}</p>
@@ -98,16 +99,20 @@ export function Education() {
                     </span>
                   </div>
 
-                  <p className="mt-4 text-sm leading-relaxed text-slate-400">{edu.description}</p>
+                  {edu.description && (
+                    <p className="mt-4 text-sm leading-relaxed text-slate-400">{edu.description}</p>
+                  )}
 
-                  <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                    {edu.highlights.map((h) => (
-                      <li key={h} className="flex items-center gap-2 text-sm text-slate-300">
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-purple-light" />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
+                  {edu.highlights.length > 0 && (
+                    <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                      {edu.highlights.map((h) => (
+                        <li key={h} className="flex items-center gap-2 text-sm text-slate-300">
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-purple-light" />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   {edu.projectLink && (
                     <a
@@ -117,7 +122,7 @@ export function Education() {
                       className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-purple-light hover:underline"
                     >
                       <ExternalLink className="h-3.5 w-3.5" />
-                      View project on GitHub
+                      View related work
                     </a>
                   )}
                 </GlassCard>
@@ -135,7 +140,7 @@ export function Education() {
         >
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs text-slate-400">
             <BookOpen className="h-4 w-4 text-purple-light" />
-            All credentials verifiable via CV download or linked GitHub repositories
+            All credentials match the CV — download the resume or open linked GitHub work
           </div>
         </motion.div>
       </div>

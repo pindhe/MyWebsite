@@ -6,31 +6,31 @@
   /* ── Dark theme (default) ── */
   html.dark {
     color-scheme: dark;
-    --bg-base: #020617;
-    --bg-elevated: #0f172a;
-    --bg-muted: #1e293b;
-    --bg-section: rgba(15, 23, 42, 0.5);
-    --text-primary: #f8fafc;
+    --bg-base: #050816;
+    --bg-elevated: #0c1324;
+    --bg-muted: #151d32;
+    --bg-section: rgba(12, 19, 36, 0.62);
+    --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
     --text-faint: #64748b;
-    --border-default: rgba(255, 255, 255, 0.1);
-    --border-hover: rgba(124, 58, 237, 0.35);
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.35);
-    --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.35);
-    --hero-bg: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 58, 237, 0.35), transparent),
-      radial-gradient(ellipse 50% 40% at 90% 20%, rgba(59, 130, 246, 0.15), transparent),
-      linear-gradient(180deg, #020617 0%, #0f172a 100%);
-    --orb-purple: rgba(124, 58, 237, 0.2);
-    --orb-blue: rgba(59, 130, 246, 0.15);
-    --noise-opacity: 0.03;
-    --scrollbar-track: #020617;
-    --btn-outline-text: #ffffff;
-    --btn-outline-border: rgba(124, 58, 237, 0.4);
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --nav-scrolled-bg: rgba(255, 255, 255, 0.05);
+    --border-default: rgba(148, 163, 184, 0.12);
+    --border-hover: rgba(139, 92, 246, 0.4);
+    --glass-bg: rgba(12, 19, 36, 0.72);
+    --glass-border: rgba(148, 163, 184, 0.12);
+    --shadow-glass: 0 12px 40px rgba(0, 0, 0, 0.42);
+    --shadow-glow: 0 0 36px rgba(124, 58, 237, 0.28);
+    --hero-bg: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 58, 237, 0.28), transparent),
+      radial-gradient(ellipse 50% 40% at 90% 20%, rgba(59, 130, 246, 0.12), transparent),
+      linear-gradient(180deg, #050816 0%, #0c1324 100%);
+    --orb-purple: rgba(124, 58, 237, 0.18);
+    --orb-blue: rgba(59, 130, 246, 0.12);
+    --noise-opacity: 0.028;
+    --scrollbar-track: #050816;
+    --btn-outline-text: #f8fafc;
+    --btn-outline-border: rgba(139, 92, 246, 0.38);
+    --input-bg: rgba(255, 255, 255, 0.045);
+    --nav-scrolled-bg: rgba(5, 8, 22, 0.78);
   }
 
   /* ── Light theme ── */
@@ -233,12 +233,17 @@
     background: var(--glass-bg);
   }
 
+  .theme-toggle-dark {
+    box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.22), 0 0 18px rgba(124, 58, 237, 0.18);
+  }
+
   .theme-toggle-knob {
-    @apply absolute top-1 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition-all duration-200 ease-out;
+    @apply absolute top-1 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition-all duration-300 ease-out;
   }
 
   .theme-toggle-knob-dark {
     @apply left-1 bg-gradient-to-br from-purple to-purple-bright text-white;
+    box-shadow: 0 0 16px rgba(124, 58, 237, 0.45);
   }
 
   .theme-toggle-knob-light {
@@ -277,6 +282,34 @@
       ),
       linear-gradient(180deg, rgba(124, 58, 237, 0.22) 0%, transparent 45%),
       radial-gradient(ellipse 80% 50% at 15% 20%, rgba(124, 58, 237, 0.28), transparent 60%);
+  }
+
+  .hero-bg-photo-overlay-mobile {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 6, 23, 0.86) 0%,
+        rgba(2, 6, 23, 0.62) 36%,
+        rgba(2, 6, 23, 0.42) 62%,
+        rgba(2, 6, 23, 0.9) 100%
+      ),
+      linear-gradient(
+        105deg,
+        rgba(2, 6, 23, 0.45) 0%,
+        rgba(2, 6, 23, 0.12) 48%,
+        transparent 72%
+      ),
+      radial-gradient(ellipse 100% 48% at 50% -8%, rgba(124, 58, 237, 0.34), transparent 58%);
+  }
+
+  .hero-photo-grade {
+    background: linear-gradient(160deg, rgba(76, 29, 149, 0.28) 0%, transparent 46%, rgba(2, 6, 23, 0.2) 100%);
+  }
+
+  .hero-photo-motion {
+    transform-origin: 38% 18%;
+    animation: hero-ken 26s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   .hero-bg-vignette {
@@ -349,6 +382,22 @@
         rgba(226, 232, 240, 0.55) 100%
       ),
       linear-gradient(180deg, rgba(124, 58, 237, 0.12) 0%, transparent 45%);
+  }
+
+  html.light .hero-bg-photo-overlay-mobile {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(248, 250, 252, 0.9) 0%,
+        rgba(248, 250, 252, 0.72) 38%,
+        rgba(238, 242, 255, 0.58) 64%,
+        rgba(248, 250, 252, 0.92) 100%
+      ),
+      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(124, 58, 237, 0.12), transparent 55%);
+  }
+
+  html.light .hero-photo-grade {
+    background: linear-gradient(160deg, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
   }
 
   html.light .hero-bg-vignette {
@@ -466,6 +515,15 @@
   }
 }
 
+@keyframes hero-ken {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1.16) translate3d(-1.4%, -0.8%, 0);
+  }
+}
+
 @keyframes hero-ring-spin {
   to {
     --hero-ring-angle: 360deg;
@@ -535,7 +593,8 @@
   .scroll-hint,
   .hero-caret,
   .hero-portrait-ring,
-  .hero-mobile-orb {
+  .hero-mobile-orb,
+  .hero-photo-motion {
     animation: none;
   }
 
@@ -644,5 +703,57 @@ html.light .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.8s;
+}
+
+html.theme-reveal::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  z-index: 2147483646;
+}
+
+.theme-ripple {
+  position: fixed;
+  z-index: 2147483647;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 9999px;
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0.96;
+  transition:
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease 0.28s;
+}
+
+.theme-ripple-dark {
+  background: radial-gradient(circle, #2e1065 0%, #0c1324 42%, #050816 100%);
+}
+
+.theme-ripple-light {
+  background: radial-gradient(circle, #ffffff 0%, #f8fafc 70%);
+}
+
+.theme-ripple-expand {
+  transform: scale(var(--ripple-scale, 90));
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-ripple {
+    display: none;
   }
 }

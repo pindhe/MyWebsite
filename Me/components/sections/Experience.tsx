@@ -17,7 +17,6 @@ import {
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Education } from "@/components/sections/Education";
-import { Certificates } from "@/components/sections/Certificates";
 import { experience, githubProfile } from "@/lib/config";
 import type { GitHubProfileData } from "@/lib/github";
 import { cn } from "@/lib/utils";
@@ -53,7 +52,7 @@ export function Experience() {
           <SectionHeader
             tag="Experience"
             title="Work History"
-            subtitle="Professional journey backed by live GitHub activity and real project delivery."
+            subtitle="Roles from hosting and full-stack delivery to design and college administration — Hargeisa, Somaliland."
           />
 
           {/* Live GitHub stats */}
@@ -191,7 +190,7 @@ export function Experience() {
                         className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-purple-light hover:underline"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
-                        View related project on GitHub
+                        View related work
                       </a>
                     )}
                   </GlassCard>
@@ -240,7 +239,6 @@ export function Experience() {
       </section>
 
       <Education />
-      <Certificates />
     </>
   );
 }

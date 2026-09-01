@@ -1,27 +1,23 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { applyTheme, getInitialTheme, type Theme } from "@/lib/theme";
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
+import { applyTheme, getInitialTheme, switchThemeFromPoint, type Theme } from "@/lib/theme";
+
+type ThemeOrigin = { x: number; y: number };
 
 type ThemeContextValue = {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (origin?: ThemeOrigin) => void;
   setTheme: (theme: Theme) => void;
   mounted: boolean;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function enableThemeTransition() {
-  document.documentElement.classList.add("theme-transition");
-  window.setTimeout(() => {
-    document.documentElement.classList.remove("theme-transition");
-  }, 400);
-}
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
+  const busy = useRef(false);
 
   useEffect(() => {
     const initial = getInitialTheme();
@@ -31,16 +27,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setTheme = useCallback((next: Theme) => {
-    enableThemeTransition();
     applyTheme(next);
     setThemeState(next);
   }, []);
 
-  const toggleTheme = useCallback(() => {
+  const toggleTheme = useCallback((origin?: ThemeOrigin) => {
+    if (busy.current) return;
+    busy.current = true;
+
     setThemeState((prev) => {
       const next = prev === "dark" ? "light" : "dark";
-      enableThemeTransition();
-      applyTheme(next);
+      void switchThemeFromPoint(next, origin).finally(() => {
+        busy.current = false;
+      });
       return next;
     });
   }, []);

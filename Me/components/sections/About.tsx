@@ -1,108 +1,171 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { siteConfig, education } from "@/lib/config";
-import { Target, Eye, Rocket, CheckCircle2, MapPin, Code2 } from "lucide-react";
+import { CVLink } from "@/components/ui/CVLink";
+import { siteConfig } from "@/lib/config";
+import {
+  Target,
+  Eye,
+  Rocket,
+  MapPin,
+  Palette,
+  Brain,
+  Cloud,
+  HeartPulse,
+  Smartphone,
+  Layers,
+  Download,
+  Handshake,
+  ArrowRight,
+} from "lucide-react";
 
 const pillars = [
   {
     icon: Target,
     title: "Mission",
-    text: "Deliver innovative, user-focused digital solutions that empower businesses and individuals through modern technology.",
+    text: "Deliver user-focused digital products that help businesses and people work with modern, reliable software.",
   },
   {
     icon: Eye,
     title: "Vision",
-    text: "Pioneer accessible AI and software innovation across Somaliland and beyond.",
+    text: "Make strong engineering and AI more accessible across Somaliland — and ship work that travels beyond it.",
   },
   {
     icon: Rocket,
-    title: "Core Values",
-    text: "Excellence, integrity, continuous learning, and impact-driven engineering.",
+    title: "Values",
+    text: "Clarity, integrity, continuous learning, and impact over noise. Build it clean. Ship it. Improve it.",
   },
 ];
 
 const highlights = [
-  "Full Stack Web & Mobile Development",
-  "UI/UX Design & Prototyping",
-  "AI Integration & Automation",
-  "Cloud Deployment (Vercel, AWS)",
-  "Healthcare & Education Systems",
-  "Startup & MVP Development",
+  { icon: Layers, label: "Full Stack Web & APIs" },
+  { icon: Smartphone, label: "Mobile Apps (Flutter)" },
+  { icon: Palette, label: "UI/UX & Design Systems" },
+  { icon: Brain, label: "AI Integration" },
+  { icon: Cloud, label: "Cloud & Deployment" },
+  { icon: HeartPulse, label: "Healthcare & Education" },
 ];
 
 export function About() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="about" className="section-padding relative overflow-hidden">
-      <div className="pointer-events-none absolute -right-40 top-20 h-80 w-80 rounded-full bg-purple/10 blur-[100px]" />
+    <section id="about" className="section-padding section-alt relative overflow-hidden">
+      <div className="pointer-events-none absolute -left-32 top-10 h-72 w-72 rounded-full bg-purple/10 blur-[100px]" />
+      <div className="pointer-events-none absolute -right-24 bottom-10 h-64 w-64 rounded-full bg-blue-500/10 blur-[90px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           tag="About Me"
-          title="Turning Ideas Into Digital Reality"
-          subtitle="Engineering smart, scalable solutions at the intersection of software, design, and AI."
+          title={siteConfig.about.headline}
+          subtitle={siteConfig.about.subtitle}
         />
 
-        <div className="grid items-start gap-10 lg:grid-cols-12">
-          {/* Profile block */}
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+        <div className="grid items-start gap-8 lg:grid-cols-12">
+          <motion.aside
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-5"
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-4"
           >
-            <GlassCard className="!p-0 overflow-hidden">
-              <div className="bg-gradient-to-br from-purple/30 to-blue-600/10 p-8 text-center">
-                <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-gradient-to-br from-purple to-purple-bright font-display text-4xl font-bold text-white shadow-glow">
-                  EP
-                </div>
-                <h3 className="mt-5 font-heading text-xl font-bold">
-                  Eng <span className="gradient-text">pindhe</span>
-                </h3>
-                <p className="mt-1 text-sm text-purple-light">{siteConfig.title}</p>
-                <div className="mt-4 inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs text-slate-400">
-                  <MapPin className="h-3.5 w-3.5 text-purple-light" />
-                  {siteConfig.location}
-                </div>
+            <GlassCard className="overflow-hidden !p-0" animate={false}>
+              <div className="relative hidden h-56 lg:block">
+                <Image
+                  src={siteConfig.profileImage}
+                  alt={siteConfig.name}
+                  fill
+                  quality={90}
+                  sizes="(min-width:1024px) 360px, 0px"
+                  className="object-cover object-[center_18%] grayscale-[10%]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-transparent" />
               </div>
-              <div className="grid grid-cols-3 divide-x divide-white/5 border-t border-white/5">
-                {siteConfig.stats.slice(0, 3).map((s) => (
-                  <div key={s.label} className="p-4 text-center">
-                    <p className="font-heading text-lg font-bold gradient-text">
-                      {s.value}{s.suffix}
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-slate-500">{s.label}</p>
+
+              <div className="p-5 sm:p-6">
+                <div className="flex items-center gap-4 lg:block lg:text-center">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-white/10 lg:hidden">
+                    <Image
+                      src={siteConfig.profileImage}
+                      alt=""
+                      fill
+                      sizes="64px"
+                      className="object-cover object-[center_20%]"
+                    />
                   </div>
-                ))}
+                  <div>
+                    <h3 className="font-heading text-xl font-bold">
+                      Eng <span className="gradient-text">pindhe</span>
+                    </h3>
+                    <p className="mt-0.5 text-sm text-purple-light">{siteConfig.roles[0]}</p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2 lg:justify-center">
+                  <span className="inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs text-slate-400">
+                    <MapPin className="h-3.5 w-3.5 text-purple-light" />
+                    {siteConfig.location}
+                  </span>
+                  <span className="rounded-full border border-purple/30 bg-purple/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-purple-light">
+                    {siteConfig.hero.speaker}
+                  </span>
+                </div>
+
+                <ul className="mt-5 flex flex-wrap gap-2 lg:justify-center" aria-label="Focus domains">
+                  {siteConfig.about.domains.map((domain) => (
+                    <li
+                      key={domain}
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300"
+                    >
+                      {domain}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-6 flex flex-wrap gap-3 lg:justify-center">
+                  <CVLink className="btn-primary !h-11 !px-4 text-sm">
+                    <Download className="h-4 w-4" />
+                    Download CV
+                  </CVLink>
+                  <a href="#contact" className="btn-outline !h-11 !px-4 text-sm">
+                    <Handshake className="h-4 w-4" />
+                    Hire me
+                  </a>
+                </div>
               </div>
             </GlassCard>
-          </motion.div>
+          </motion.aside>
 
-          {/* Story */}
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-7"
+            transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-8"
           >
             <GlassCard>
-              <div className="mb-4 flex items-center gap-2">
-                <Code2 className="h-5 w-5 text-purple-light" />
-                <h3 className="font-heading text-lg font-semibold">My Story</h3>
-              </div>
-              <p className="leading-relaxed text-slate-400">{siteConfig.bio}</p>
-              <p className="mt-4 leading-relaxed text-slate-400">
-                With 4+ years of hands-on experience, I&apos;ve delivered 30+ projects spanning hospital systems,
-                education platforms, AI tools, and premium web applications — always focused on clean code,
-                beautiful design, and real-world impact.
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-light">
+                My story
               </p>
-              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+              {siteConfig.about.story.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)} className="mt-4 leading-relaxed text-slate-400">
+                  {paragraph}
+                </p>
+              ))}
+
+              <ul className="mt-7 grid gap-3 sm:grid-cols-2">
                 {highlights.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-slate-300">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-purple-light" />
-                    {item}
+                  <li
+                    key={item.label}
+                    className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2.5 text-sm text-slate-300"
+                  >
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-purple/15 text-purple-light">
+                      <item.icon className="h-4 w-4" />
+                    </span>
+                    {item.label}
                   </li>
                 ))}
               </ul>
@@ -110,10 +173,9 @@ export function About() {
           </motion.div>
         </div>
 
-        {/* Mission / Vision / Values */}
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
           {pillars.map((item, i) => (
-            <GlassCard key={item.title} delay={i * 0.1} className="group">
+            <GlassCard key={item.title} delay={i * 0.08} className="group">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple/15 text-purple-light transition-colors group-hover:bg-purple group-hover:text-white">
                 <item.icon className="h-6 w-6" />
               </div>
@@ -123,18 +185,29 @@ export function About() {
           ))}
         </div>
 
-        {/* Education preview */}
-        <div className="mt-10">
-          <h3 className="mb-6 text-center font-heading text-xl font-semibold">Education Snapshot</h3>
-          <div className="grid gap-4 md:grid-cols-3">
-            {education.slice(0, 3).map((edu, i) => (
-              <GlassCard key={edu.id} delay={i * 0.08} className="relative !pb-5">
-                <span className="text-xs font-semibold text-purple-light">{edu.period}</span>
-                <h4 className="mt-2 font-heading font-semibold">{edu.degree}</h4>
-                <p className="mt-1 text-sm text-slate-400">{edu.school}</p>
-                <span className="absolute bottom-5 right-5 rounded-full bg-purple/10 px-2.5 py-0.5 text-[10px] font-medium text-purple-light">
-                  {edu.status}
-                </span>
+        <div className="mt-12">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-light">
+                Path
+              </p>
+              <h3 className="mt-1 font-heading text-xl font-semibold">The journey so far</h3>
+            </div>
+            <a
+              href="#education"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-purple-light hover:text-white"
+            >
+              Academic background
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {siteConfig.about.journey.map((step, i) => (
+              <GlassCard key={step.year} delay={i * 0.06} className="!p-4">
+                <span className="font-heading text-sm font-bold text-purple-light">{step.year}</span>
+                <h4 className="mt-2 font-heading text-sm font-semibold leading-snug">{step.title}</h4>
+                <p className="mt-1 text-xs leading-relaxed text-slate-400">{step.place}</p>
               </GlassCard>
             ))}
           </div>

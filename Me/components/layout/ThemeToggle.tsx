@@ -15,11 +15,17 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      onClick={toggleTheme}
+      onClick={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        toggleTheme({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       aria-pressed={isDark}
       title={isDark ? "Light mode" : "Dark mode"}
-      className="theme-toggle"
+      className={cn("theme-toggle", isDark && "theme-toggle-dark")}
     >
       <Sun
         className={cn(
