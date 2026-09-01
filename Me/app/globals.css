@@ -427,6 +427,65 @@
     animation-delay: 0.5s;
   }
 
+  .hero-join {
+    @apply flex flex-wrap items-center gap-2.5;
+  }
+
+  .hero-join-copy {
+    @apply font-heading text-sm font-semibold tracking-tight sm:text-base;
+    color: var(--text-primary);
+  }
+
+  .hero-love-btn {
+    @apply relative flex h-11 w-11 items-center justify-center rounded-full;
+    border: 1px solid rgba(244, 63, 94, 0.4);
+    background: rgba(244, 63, 94, 0.14);
+    color: #fb7185;
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .hero-love-btn:hover {
+    transform: scale(1.06);
+    background: rgba(244, 63, 94, 0.24);
+  }
+
+  .hero-love-btn:active {
+    transform: scale(0.94);
+  }
+
+  .hero-love-btn-on {
+    background: rgba(244, 63, 94, 0.32);
+    box-shadow: 0 0 18px rgba(244, 63, 94, 0.35);
+  }
+
+  .hero-love-plus {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fb7185;
+    pointer-events: none;
+    animation: hero-love-pop 0.85s ease-out forwards;
+  }
+
+  @keyframes hero-love-pop {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 10px) scale(0.75);
+    }
+    18% {
+      opacity: 1;
+      transform: translate(-50%, -2px) scale(1.12);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -34px) scale(1);
+    }
+  }
+
   .scroll-hint {
     animation: float-y 2.2s ease-in-out infinite;
   }

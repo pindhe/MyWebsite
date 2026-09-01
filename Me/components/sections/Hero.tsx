@@ -18,10 +18,75 @@ import {
   Star,
   Clock,
   ArrowRight,
+  Heart,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
+import { cn } from "@/lib/utils";
 import { HeroBackground } from "@/components/effects/HeroBackground";
 import { CVLink } from "@/components/ui/CVLink";
+
+const JOIN_KEY = "eng-pindhe-joins";
+
+function formatJoinCount(n: number) {
+  if (n < 1000) return `${n}+`;
+  return `${Math.floor(n / 1000) * 1000}+`;
+}
+
+function JoinPindhe() {
+  const [count, setCount] = useState(1);
+  const [liked, setLiked] = useState(false);
+  const [bursts, setBursts] = useState<{ id: number }[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = Number(localStorage.getItem(JOIN_KEY));
+      if (Number.isFinite(stored) && stored >= 1) setCount(stored);
+      if (localStorage.getItem(`${JOIN_KEY}-liked`) === "1") setLiked(true);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const onLove = () => {
+    setCount((n) => {
+      const next = n + 1;
+      try {
+        localStorage.setItem(JOIN_KEY, String(next));
+        localStorage.setItem(`${JOIN_KEY}-liked`, "1");
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+    setLiked(true);
+    const id = Date.now() + Math.random();
+    setBursts((current) => [...current, { id }]);
+    window.setTimeout(() => {
+      setBursts((current) => current.filter((burst) => burst.id !== id));
+    }, 900);
+  };
+
+  return (
+    <div className="hero-join">
+      <p className="hero-join-copy">
+        <span className="gradient-text">{formatJoinCount(count)}</span> join Pindhe
+      </p>
+      <button
+        type="button"
+        className={cn("hero-love-btn", liked && "hero-love-btn-on")}
+        aria-label="Love and join Pindhe"
+        onClick={onLove}
+      >
+        <Heart className="h-5 w-5" fill={liked ? "currentColor" : "none"} />
+        {bursts.map((burst) => (
+          <span key={burst.id} className="hero-love-plus" aria-hidden>
+            +1
+          </span>
+        ))}
+      </button>
+    </div>
+  );
+}
 
 const socials = [
   { icon: Github, href: siteConfig.github, label: "GitHub" },
@@ -178,9 +243,12 @@ export function Hero() {
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
               {siteConfig.bio}
             </p>
-            <p className="mt-2 text-sm font-medium tracking-wide text-purple-light">
-              {siteConfig.hero.focus}
-            </p>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:justify-start sm:gap-5">
+              <p className="text-sm font-medium tracking-wide text-purple-light">
+                {siteConfig.hero.focus}
+              </p>
+              <JoinPindhe />
+            </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <CVLink className="btn-primary !px-5 shadow-glow">
@@ -212,17 +280,6 @@ export function Hero() {
                 </a>
               ))}
             </div>
-
-            <ul className="mt-7 flex flex-wrap gap-2" aria-label="Core stack">
-              {siteConfig.hero.stack.map((tech) => (
-                <li
-                  key={tech}
-                  className="theme-chip rounded-full px-3 py-1 text-xs font-medium"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
           </motion.div>
 
           <motion.div
