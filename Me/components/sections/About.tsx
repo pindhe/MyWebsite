@@ -26,27 +26,27 @@ const pillars = [
   {
     icon: Target,
     title: "Mission",
-    text: "Deliver user-focused digital products that help businesses and people work with modern, reliable software.",
+    text: siteConfig.about.mission,
   },
   {
     icon: Eye,
     title: "Vision",
-    text: "Make strong engineering and AI more accessible across Somaliland — and ship work that travels beyond it.",
+    text: siteConfig.about.vision,
   },
   {
     icon: Rocket,
-    title: "Values",
-    text: "Clarity, integrity, continuous learning, and impact over noise. Build it clean. Ship it. Improve it.",
+    title: "Languages",
+    text: `${siteConfig.about.languages.join(" and ")} — professional communication across clients, teams, and documentation.`,
   },
 ];
 
 const highlights = [
-  { icon: Layers, label: "Full Stack Web & APIs" },
-  { icon: Smartphone, label: "Mobile Apps (Flutter)" },
-  { icon: Palette, label: "UI/UX & Design Systems" },
-  { icon: Brain, label: "AI Integration" },
-  { icon: Cloud, label: "Cloud & Deployment" },
-  { icon: HeartPulse, label: "Healthcare & Education" },
+  { icon: Layers, label: "Full Stack Development" },
+  { icon: Smartphone, label: "Mobile App Development" },
+  { icon: Palette, label: "UI/UX & Graphic Design" },
+  { icon: Brain, label: "Artificial Intelligence" },
+  { icon: Cloud, label: "IT Support & Networks" },
+  { icon: HeartPulse, label: "Video Editing & Media" },
 ];
 
 export function About() {
@@ -73,38 +73,25 @@ export function About() {
             className="lg:col-span-4"
           >
             <GlassCard className="overflow-hidden !p-0" animate={false}>
-              <div className="relative hidden h-56 lg:block">
+              <div className="relative aspect-[4/5] w-full sm:aspect-[3/4] lg:h-80 lg:aspect-auto">
                 <Image
                   src={siteConfig.profileImage}
                   alt={siteConfig.name}
                   fill
                   quality={90}
-                  sizes="(min-width:1024px) 360px, 0px"
-                  className="object-cover object-[center_18%] grayscale-[10%]"
+                  sizes="(min-width:1024px) 360px, 90vw"
+                  className="object-cover object-[center_42%]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[var(--bg-elevated)] via-[var(--bg-elevated)]/70 to-transparent" />
               </div>
 
-              <div className="p-5 sm:p-6">
-                <div className="flex items-center gap-4 lg:block lg:text-center">
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-white/10 lg:hidden">
-                    <Image
-                      src={siteConfig.profileImage}
-                      alt=""
-                      fill
-                      sizes="64px"
-                      className="object-cover object-[center_20%]"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-heading text-xl font-bold">
-                      Eng <span className="gradient-text">pindhe</span>
-                    </h3>
-                    <p className="mt-0.5 text-sm text-purple-light">{siteConfig.roles[0]}</p>
-                  </div>
-                </div>
+              <div className="relative -mt-10 px-5 pb-6 pt-0 text-center sm:px-6">
+                <h3 className="font-heading text-xl font-bold sm:text-2xl">
+                  Eng <span className="gradient-text">pindhe</span>
+                </h3>
+                <p className="mt-1 text-sm text-purple-light">{siteConfig.roles[0]}</p>
 
-                <div className="mt-4 flex flex-wrap gap-2 lg:justify-center">
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs text-slate-400">
                     <MapPin className="h-3.5 w-3.5 text-purple-light" />
                     {siteConfig.location}
@@ -114,7 +101,7 @@ export function About() {
                   </span>
                 </div>
 
-                <ul className="mt-5 flex flex-wrap gap-2 lg:justify-center" aria-label="Focus domains">
+                <ul className="mt-5 flex flex-wrap justify-center gap-2" aria-label="Focus domains">
                   {siteConfig.about.domains.map((domain) => (
                     <li
                       key={domain}
@@ -125,7 +112,7 @@ export function About() {
                   ))}
                 </ul>
 
-                <div className="mt-6 flex flex-wrap gap-3 lg:justify-center">
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <CVLink className="btn-primary !h-11 !px-4 text-sm">
                     <Download className="h-4 w-4" />
                     Download CV

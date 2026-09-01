@@ -1,10 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [{ source: "/resume.pdf", destination: "/resumepindhe.pdf" }];
+  },
   async headers() {
     return [
       {
         source: "/resume.pdf",
+        headers: [
+          { key: "Content-Type", value: "application/pdf" },
+          { key: "Content-Disposition", value: 'inline; filename="Eng-pindhe-CV.pdf"' },
+        ],
+      },
+      {
+        source: "/resumepindhe.pdf",
         headers: [
           { key: "Content-Type", value: "application/pdf" },
           { key: "Content-Disposition", value: 'inline; filename="Eng-pindhe-CV.pdf"' },

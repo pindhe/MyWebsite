@@ -244,7 +244,7 @@ export function Hero() {
                     priority
                     quality={90}
                     sizes="(max-width:768px) 288px, 352px"
-                    className="object-cover object-[center_22%] grayscale-[12%] contrast-[1.05]"
+                    className="object-cover object-[center_48%]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-purple/5" />
                   <div className="hero-profile-text absolute inset-x-0 bottom-0 hidden p-5 lg:block">

@@ -4,10 +4,10 @@ import { useState } from "react";
 import {
   Monitor,
   Server,
-  Database,
   Smartphone,
   Wrench,
-  Cloud,
+  Palette,
+  Cpu,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -17,13 +17,13 @@ import { skills } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 const categories: { id: string; label: string; icon: LucideIcon; data: string[] }[] = [
+  { id: "engineering", label: "Engineering", icon: Cpu, data: skills.engineering },
   { id: "frontend", label: "Frontend", icon: Monitor, data: skills.frontend },
   { id: "backend", label: "Backend", icon: Server, data: skills.backend },
-  { id: "database", label: "Database", icon: Database, data: skills.database },
   { id: "mobile", label: "Mobile", icon: Smartphone, data: skills.mobile },
-  { id: "tools", label: "Tools", icon: Wrench, data: skills.tools },
-  { id: "cloud", label: "Cloud", icon: Cloud, data: skills.cloud },
-  { id: "soft", label: "Soft Skills", icon: Users, data: skills.soft },
+  { id: "design", label: "Design & Media", icon: Palette, data: skills.design },
+  { id: "systems", label: "IT & Systems", icon: Wrench, data: skills.systems },
+  { id: "soft", label: "Professional", icon: Users, data: skills.soft },
 ];
 
 const skillLevels: Record<string, number> = {
@@ -56,7 +56,7 @@ function SkillBar({ name }: { name: string }) {
 }
 
 export function Skills() {
-  const [active, setActive] = useState("frontend");
+  const [active, setActive] = useState("engineering");
   const current = categories.find((c) => c.id === active)!;
   const totalSkills = Object.values(skills).flat().length;
 
@@ -66,7 +66,7 @@ export function Skills() {
         <SectionHeader
           tag="Skills"
           title="Core Skills & Expertise"
-          subtitle="Technical and professional skills across software engineering, design, and cloud systems."
+          subtitle="Skills from the CV — software engineering, design, media, IT systems, and professional work."
         />
 
         {/* Stats */}

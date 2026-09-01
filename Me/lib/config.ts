@@ -1,12 +1,12 @@
 export const siteConfig = {
   name: "Eng Nour H. pindhe",
   shortName: "Eng pindhe",
-  title: "Software Engineer · Full Stack Developer · UI/UX Designer",
+  title: "Software Engineer · Full Stack Developer · Mobile Developer",
   roles: [
     "Software Engineer",
     "Full Stack Developer",
+    "Mobile Developer",
     "UI/UX Designer",
-    "Mobile App Developer",
     "AI Enthusiast",
   ],
   email: "kharash420@gmail.com",
@@ -19,9 +19,10 @@ export const siteConfig = {
   facebook: "",
   twitter: "",
   instagram: "",
-  bio: "Full Stack Developer with a background in Biotechnology and Artificial Intelligence. I build smart, scalable web and mobile solutions that blend clean engineering with real-world impact.",
+  bio: "Full Stack Developer, Software Engineer, and Mobile Developer with a background in Biotechnology and Artificial Intelligence. I build smart, scalable, high-performance web, mobile, and software solutions.",
   heroImage: "/bgimage.jpeg",
-  profileImage: "/image.jpeg",
+  profileImage: "/portrait.png",
+  cvPath: "/resumepindhe.pdf",
   hero: {
     greeting: "Hello, I'm",
     availability: "Available for hire",
@@ -38,12 +39,17 @@ export const siteConfig = {
   about: {
     headline: "Turning Ideas Into Digital Reality",
     subtitle:
-      "Engineering smart, scalable products at the intersection of software, design, and AI — from Hargeisa to anywhere.",
+      "Software Engineer & AI — building smart, scalable products for education, healthcare, business, and public services.",
     story: [
-      "I'm a software engineer based in Hargeisa, Somaliland. I came into building through Biotechnology and Artificial Intelligence, then focused on shipping real systems people use every day — clinics, colleges, billing platforms, and mobile apps.",
-      "Over 4+ years I've delivered 30+ projects across healthcare, education, and fintech. I care about clean architecture, considered UI, and software that holds up in production. I also speak in the local tech community, including the SOLTELCO hackathon.",
+      "Full Stack Developer | Software Engineer | Mobile Developer with a background in Biotechnology and Artificial Intelligence. Passionate about building smart, scalable, and high-performance web, mobile, and software solutions that deliver exceptional user experiences.",
+      "I work across software engineering, UI/UX, graphic design, and IT support — from Hargeisa Web Hosting and Hage Reading Club to Soltelco, Abaarso Tech University, and CodeAlpha.",
     ],
-    domains: ["Healthcare", "Education", "Fintech", "AI"],
+    domains: ["AI", "Full Stack", "Mobile", "UI/UX", "IT Support"],
+    languages: ["English", "Somali"],
+    mission:
+      "Continuously expand my expertise in Artificial Intelligence, Machine Learning, and Software Engineering — and build innovative, scalable, user-centered technology that addresses real-world challenges.",
+    vision:
+      "To become a globally recognized Artificial Intelligence Engineer and technology leader, driving ethical AI and software that transforms education, healthcare, business, and public services — and to contribute to the digital transformation of Somaliland as a hub for technological innovation in Africa.",
     journey: [
       { year: "2021", title: "Diploma of Computer", place: "Iqra College" },
       { year: "2022", title: "Diploma of ICT", place: "Tanaad College" },
@@ -55,13 +61,33 @@ export const siteConfig = {
 };
 
 export const skills = {
-  frontend: ["HTML5", "CSS3", "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "Bootstrap"],
-  backend: ["Python", "Django", "FastAPI", "Laravel", "PHP", "Node.js", "Express"],
-  database: ["MySQL", "PostgreSQL", "MongoDB", "SQLite", "SQL Server"],
-  mobile: ["Flutter", "React Native"],
-  tools: ["Git", "GitHub", "Figma", "VS Code", "Docker", "Firebase", "Vercel", "Render", "Linux"],
-  cloud: ["AWS", "Azure", "Google Cloud"],
-  soft: ["Leadership", "Communication", "Problem Solving", "Teamwork", "Time Management", "Critical Thinking"],
+  engineering: [
+    "Software Engineering",
+    "Full Stack Development",
+    "Web Development",
+    "Artificial Intelligence",
+    "API Development & Integration",
+  ],
+  frontend: ["HTML5", "CSS3", "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "UI/UX Design"],
+  backend: ["Python", "Django", "FastAPI", "Laravel", "PHP", "Node.js", "Database Management"],
+  mobile: ["Mobile App Development", "Flutter", "React Native"],
+  design: ["Graphic Design", "Video Editing", "Content Creation", "Digital Marketing", "Media Management"],
+  systems: [
+    "IT Support & Troubleshooting",
+    "Network Administration",
+    "CCTV Camera Systems",
+    "Fingerprint & Biometric Systems",
+    "Git & GitHub",
+    "Microsoft Excel",
+  ],
+  soft: [
+    "Communication Skills",
+    "Teamwork & Collaboration",
+    "Leadership & Interpersonal Skills",
+    "Project Management",
+    "Report Writing",
+    "Economics & Management",
+  ],
 };
 
 export const githubProfile = "https://github.com/pindhe";
@@ -262,7 +288,7 @@ export type ExperienceEntry = {
 export const experience: ExperienceEntry[] = [
   {
     id: "hwhd",
-    company: "Hargeisa Web Hosting And Domain",
+    company: "Hargeisa Web Hosting & Domain",
     role: "Software Developer",
     period: "Dec 2025 — Feb 2026",
     location: "Hargeisa, Somaliland",
@@ -276,13 +302,13 @@ export const experience: ExperienceEntry[] = [
   },
   {
     id: "employee-portal",
-    company: "Soltelco and Abaarso Tech",
-    role: "Employee Portal Management System",
+    company: "Soltelco and Abaarso Tech University",
+    role: "Employee Portal Management",
     period: "Nov 2025",
     location: "Hargeisa, Somaliland",
     type: "work",
     description:
-      "Built a full-stack employee portal with the Soltelco and Abaarso Tech team — shipping features together and working through production problems.",
+      "Built a full-stack employee portal with the Soltelco and Abaarso Tech University team.",
     achievements: [
       "Building a full-stack program",
       "Teamwork",
@@ -292,14 +318,24 @@ export const experience: ExperienceEntry[] = [
   {
     id: "hrc",
     company: "Hage Reading Club",
-    role: "Designer",
+    role: "Designer & Video Editor",
     period: "Apr 2025 — Present",
     location: "Hargeisa, Somaliland",
     type: "work",
     description:
-      "Designer and developer for Hage Reading Club — Photoshop visuals plus ongoing product development for the club platform.",
-    achievements: ["Photoshop design", "Development"],
+      "Designer, video editor, and developer for Hage Reading Club — member contributing visual and product work.",
+    achievements: ["Designer and video editor", "Member", "Development"],
     link: "https://hagerc.vercel.app",
+  },
+  {
+    id: "codealpha",
+    company: "CodeAlpha",
+    role: "Internship Program",
+    period: "2026",
+    location: "Remote",
+    type: "internship",
+    description: "Remote internship focused on full-stack development and mobile apps.",
+    achievements: ["Full stack development", "Mobile app developer"],
   },
   {
     id: "iqra",
