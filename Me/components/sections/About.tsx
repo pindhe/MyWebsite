@@ -80,7 +80,7 @@ export function About() {
                   fill
                   quality={90}
                   sizes="(min-width:1024px) 360px, 90vw"
-                  className="object-cover object-[center_42%]"
+                  className="object-cover object-[center_20%]"
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[var(--bg-elevated)] via-[var(--bg-elevated)]/70 to-transparent" />
               </div>

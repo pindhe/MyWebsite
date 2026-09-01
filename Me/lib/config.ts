@@ -21,7 +21,7 @@ export const siteConfig = {
   instagram: "",
   bio: "Full Stack Developer, Software Engineer, and Mobile Developer with a background in Biotechnology and Artificial Intelligence. I build smart, scalable, high-performance web, mobile, and software solutions.",
   heroImage: "/bgimage.jpeg",
-  profileImage: "/portrait.png",
+  profileImage: "/profile.jpeg",
   cvPath: "/resumepindhe.pdf",
   hero: {
     greeting: "Hello, I'm",
