@@ -1,46 +1,34 @@
 import { NextResponse } from "next/server";
-import { getJoinCount, incrementJoinCount } from "@/lib/joins-store";
+import { addJoinCount, getJoinCount } from "@/lib/joins-store";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const COOKIE = "pindhe_joined";
+const noStore = { "Cache-Control": "no-store, must-revalidate" };
 
-function hasJoined(request: Request) {
-  const cookie = request.headers.get("cookie") ?? "";
-  return new RegExp(`(?:^|;\\s*)${COOKIE}=1(?:;|$)`).test(cookie);
-}
-
-function withJoinCookie(body: unknown, joined: boolean) {
-  const res = NextResponse.json(body);
-  if (joined) {
-    res.cookies.set(COOKIE, "1", {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-  }
-  return res;
-}
-
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const count = await getJoinCount();
-    return NextResponse.json({ count, joined: hasJoined(request) });
+    return NextResponse.json({ count }, { headers: noStore });
   } catch {
-    return NextResponse.json({ count: 1, joined: false });
+    return NextResponse.json({ count: 0 }, { headers: noStore });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const count = await getJoinCount();
-    if (hasJoined(request)) {
-      return withJoinCookie({ count, joined: true }, true);
+    let add = 1;
+    try {
+      const body = (await request.json()) as { add?: number };
+      if (typeof body.add === "number" && Number.isFinite(body.add)) {
+        add = body.add;
+      }
+    } catch {
+      add = 1;
     }
-    const next = await incrementJoinCount();
-    return withJoinCookie({ count: next, joined: true }, true);
+    const count = await addJoinCount(add);
+    return NextResponse.json({ count }, { headers: noStore });
   } catch {
-    return NextResponse.json({ count: 1, joined: false }, { status: 500 });
+    return NextResponse.json({ count: 0 }, { status: 500, headers: noStore });
   }
 }

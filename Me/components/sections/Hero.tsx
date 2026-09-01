@@ -25,40 +25,36 @@ import { cn } from "@/lib/utils";
 import { HeroBackground } from "@/components/effects/HeroBackground";
 import { CVLink } from "@/components/ui/CVLink";
 
-const JOINED_KEY = "eng-pindhe-joined";
-
 function formatJoinCount(n: number) {
   if (n < 1000) return `${n}+`;
   return `${Math.floor(n / 1000) * 1000}+`;
 }
 
 function JoinPindhe() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
   const [liked, setLiked] = useState(false);
   const [bursts, setBursts] = useState<{ id: number }[]>([]);
-  const posting = useRef(false);
+  const pending = useRef(0);
+  const flushing = useRef(false);
 
   useEffect(() => {
-    try {
-      if (localStorage.getItem(JOINED_KEY) === "1") setLiked(true);
-    } catch {
-      /* ignore */
-    }
-
     let cancelled = false;
+
     const load = async () => {
+      if (pending.current > 0 || flushing.current) return;
       try {
         const res = await fetch("/api/joins", { cache: "no-store" });
-        const data = (await res.json()) as { count?: number; joined?: boolean };
-        if (!cancelled && typeof data.count === "number") setCount(Math.max(1, data.count));
-        if (!cancelled && data.joined) setLiked(true);
+        const data = (await res.json()) as { count?: number };
+        if (!cancelled && typeof data.count === "number") {
+          setCount(Math.max(0, data.count));
+        }
       } catch {
         /* keep current */
       }
     };
 
     load();
-    const timer = window.setInterval(load, 12000);
+    const timer = window.setInterval(load, 3000);
     return () => {
       cancelled = true;
       window.clearInterval(timer);
@@ -73,26 +69,48 @@ function JoinPindhe() {
     }, 900);
   };
 
-  const onLove = async () => {
+  const flushJoins = async () => {
+    if (flushing.current) return;
+    flushing.current = true;
+    try {
+      while (pending.current > 0) {
+        const add = pending.current;
+        pending.current = 0;
+        try {
+          const res = await fetch("/api/joins", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ add }),
+          });
+          const data = (await res.json()) as { count?: number };
+          if (!res.ok) {
+            pending.current += add;
+            break;
+          }
+          if (typeof data.count === "number") {
+            setCount((current) => Math.max(current, data.count ?? current));
+          }
+        } catch {
+          pending.current += add;
+          break;
+        }
+      }
+    } catch {
+      /* keep optimistic total */
+    } finally {
+      flushing.current = false;
+      if (pending.current > 0) {
+        void flushJoins();
+      }
+    }
+  };
+
+  const onLove = () => {
     playBurst();
     setLiked(true);
-    if (posting.current) return;
-    posting.current = true;
-    try {
-      localStorage.setItem(JOINED_KEY, "1");
-    } catch {
-      /* ignore */
-    }
-
-    try {
-      const res = await fetch("/api/joins", { method: "POST" });
-      const data = (await res.json()) as { count?: number };
-      if (typeof data.count === "number") setCount(Math.max(1, data.count));
-    } catch {
-      /* keep current */
-    } finally {
-      posting.current = false;
-    }
+    setCount((n) => n + 1);
+    pending.current += 1;
+    void flushJoins();
   };
 
   return (

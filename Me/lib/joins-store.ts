@@ -6,6 +6,8 @@ const FILE = path.join(process.cwd(), "data", "joins.json");
 
 type FileStore = { count: number };
 
+const memory = globalThis as { __pindheJoins?: number; __pindheJoinLock?: Promise<number> };
+
 function redisAuth() {
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -30,20 +32,10 @@ async function readFileCount(): Promise<number> {
     const raw = await fs.readFile(FILE, "utf8");
     const data = JSON.parse(raw) as FileStore;
     const n = Number(data.count);
-    return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1;
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
   } catch {
-    return 1;
+    return 0;
   }
-}
-
-const memory = globalThis as { __pindheJoins?: number };
-
-function memoryCount() {
-  return memory.__pindheJoins;
-}
-
-function setMemoryCount(count: number) {
-  memory.__pindheJoins = count;
 }
 
 async function writeFileCount(count: number) {
@@ -51,41 +43,47 @@ async function writeFileCount(count: number) {
   await fs.writeFile(FILE, JSON.stringify({ count }, null, 2), "utf8");
 }
 
+function setMemoryCount(count: number) {
+  memory.__pindheJoins = count;
+}
+
 export async function getJoinCount(): Promise<number> {
   const redisVal = await redisCommand(`GET/${REDIS_KEY}`);
   if (redisVal != null && redisVal !== "") {
     const n = Number(redisVal);
     if (Number.isFinite(n) && n >= 0) {
-      const count = Math.max(1, Math.floor(n));
+      const count = Math.max(0, Math.floor(n));
       setMemoryCount(count);
       return count;
     }
   }
   const file = await readFileCount();
-  const mem = memoryCount();
-  const count = Math.max(file, mem ?? 0, 1);
+  const mem = memory.__pindheJoins;
+  const count = Math.max(file, mem ?? 0, 0);
   setMemoryCount(count);
   return count;
 }
 
-export async function incrementJoinCount(): Promise<number> {
+async function addJoinCountInner(amount: number): Promise<number> {
+  const add = Math.min(10_000, Math.max(1, Math.floor(amount)));
   const redis = redisAuth();
+
   if (redis) {
     const existing = await redisCommand(`GET/${REDIS_KEY}`);
     if (existing == null || existing === "") {
       const seed = await getJoinCount();
       await redisCommand(`SET/${REDIS_KEY}/${seed}`);
     }
-    const next = await redisCommand(`INCR/${REDIS_KEY}`);
+    const next = await redisCommand(`INCRBY/${REDIS_KEY}/${add}`);
     const n = Number(next);
-    if (Number.isFinite(n) && n >= 1) {
+    if (Number.isFinite(n) && n >= 0) {
       setMemoryCount(Math.floor(n));
       writeFileCount(n).catch(() => undefined);
       return Math.floor(n);
     }
   }
 
-  const next = (await getJoinCount()) + 1;
+  const next = (await getJoinCount()) + add;
   setMemoryCount(next);
   try {
     await writeFileCount(next);
@@ -93,4 +91,13 @@ export async function incrementJoinCount(): Promise<number> {
     /* read-only hosts still keep the in-memory total */
   }
   return next;
+}
+
+export function addJoinCount(amount: number): Promise<number> {
+  const run = (memory.__pindheJoinLock ?? Promise.resolve(0)).then(
+    () => addJoinCountInner(amount),
+    () => addJoinCountInner(amount)
+  );
+  memory.__pindheJoinLock = run;
+  return run;
 }
