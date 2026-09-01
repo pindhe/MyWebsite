@@ -161,8 +161,8 @@ export function Hero() {
             </div>
 
             <h1 className="font-display text-[2.85rem] font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-              Eng{" "}
-              <span className="gradient-text">{siteConfig.shortName.replace(/^Eng\s+/i, "")}</span>
+              Nour H.{" "}
+              <span className="gradient-text">Pindhe</span>
             </h1>
 
             <p className="sr-only">{siteConfig.roles.join(", ")}</p>
@@ -249,12 +249,9 @@ export function Hero() {
                   <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-purple/5" />
                   <div className="hero-profile-text absolute inset-x-0 bottom-0 hidden p-5 lg:block">
                     <p className="font-heading text-lg font-bold text-white">
-                      {siteConfig.shortName}
+                      {siteConfig.hero.displayName}
                     </p>
                     <p className="text-sm text-slate-300">{siteConfig.roles[0]}</p>
-                    <span className="mt-2 inline-flex rounded-full border border-purple/30 bg-purple/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-purple-light backdrop-blur-sm">
-                      {siteConfig.hero.speaker}
-                    </span>
                   </div>
                 </div>
               </div>

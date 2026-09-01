@@ -45,8 +45,8 @@ export const siteConfig = {
   cvPath: "/resumepindhe.pdf",
   hero: {
     greeting: "Hello, I'm",
+    displayName: "Nour H. Pindhe",
     availability: "Available for hire",
-    speaker: "SOLTELCO Hackathon Speaker",
     focus: "Web · Mobile · AI",
     stack: ["Next.js", "React", "TypeScript", "Flutter", "FastAPI", "Python", "Laravel", "Figma"],
   },

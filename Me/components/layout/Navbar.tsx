@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LayoutGroup, motion } from "framer-motion";
 import {
   Menu,
   X,
@@ -30,14 +31,15 @@ const iconMap: Record<string, LucideIcon> = {
   Mail,
 };
 
-function IconTip({ label }: { label: string }) {
-  return <span className="nav-icon-tip">{label}</span>;
-}
+const highlightSpring = { type: "spring" as const, stiffness: 420, damping: 32, mass: 0.7 };
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [active, setActive] = useState("#home");
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  const focused = hovered ?? active;
 
   useEffect(() => {
     let ticking = false;
@@ -89,30 +91,57 @@ export function Navbar() {
           Eng <span className="gradient-text">pindhe</span>
         </a>
 
-        <div className="hidden items-center gap-1 lg:flex">
-          {navLinks.map((link) => {
-            const Icon = iconMap[link.icon];
-            const isActive = active === link.href;
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                aria-label={link.label}
-                aria-current={isActive ? "page" : undefined}
-                className={cn("nav-icon-btn", isActive && "nav-icon-btn-active")}
-              >
-                {Icon && <Icon className="h-[18px] w-[18px]" strokeWidth={isActive ? 2.25 : 1.75} />}
-                <IconTip label={link.label} />
-              </a>
-            );
-          })}
-        </div>
+        <LayoutGroup id="nav-rail">
+          <div
+            className="nav-rail"
+            onMouseLeave={() => setHovered(null)}
+          >
+            {navLinks.map((link) => {
+              const Icon = iconMap[link.icon];
+              const isActive = active === link.href;
+              const isFocused = focused === link.href;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  aria-label={link.label}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn("nav-icon-btn", isFocused && "nav-icon-btn-active")}
+                  onMouseEnter={() => setHovered(link.href)}
+                  onFocus={() => setHovered(link.href)}
+                  onBlur={() => setHovered(null)}
+                  onClick={() => setActive(link.href)}
+                >
+                  {isFocused && (
+                    <motion.span
+                      layoutId="nav-highlight"
+                      className="nav-icon-highlight"
+                      transition={highlightSpring}
+                    />
+                  )}
+                  {Icon && (
+                    <Icon className="h-[18px] w-[18px]" strokeWidth={isFocused ? 2.25 : 1.75} />
+                  )}
+                  {isFocused && (
+                    <motion.span
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.16 }}
+                      className="nav-icon-name"
+                    >
+                      {link.label}
+                    </motion.span>
+                  )}
+                </a>
+              );
+            })}
+          </div>
+        </LayoutGroup>
 
         <div className="hidden items-center gap-2 lg:flex">
           <ThemeToggle />
           <CVLink className="nav-icon-btn btn-outline !h-10 !w-10 !p-0" aria-label="Download CV">
             <Download className="h-4 w-4" />
-            <IconTip label="CV" />
           </CVLink>
           <a
             href="#contact"
@@ -120,7 +149,6 @@ export function Navbar() {
             className="nav-icon-btn btn-primary !h-10 !w-10 !p-0"
           >
             <Handshake className="h-4 w-4" />
-            <IconTip label="Hire me" />
           </a>
         </div>
 
@@ -139,12 +167,19 @@ export function Navbar() {
           <div className="flex flex-col gap-1 px-4 py-4">
             {navLinks.map((link) => {
               const Icon = iconMap[link.icon];
+              const isActive = active === link.href;
               return (
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="tap-fast inline-flex items-center gap-3 rounded-lg px-4 py-3 text-[var(--text-secondary)] hover:bg-purple/10 hover:text-[var(--text-primary)]"
+                  onClick={() => {
+                    setActive(link.href);
+                    setMobileOpen(false);
+                  }}
+                  className={cn(
+                    "tap-fast inline-flex items-center gap-3 rounded-lg px-4 py-3 text-[var(--text-secondary)] hover:bg-purple/10 hover:text-[var(--text-primary)]",
+                    isActive && "bg-purple/10 text-[var(--text-primary)]"
+                  )}
                 >
                   {Icon && <Icon className="h-5 w-5 text-purple-light" />}
                   {link.label}

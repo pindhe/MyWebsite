@@ -96,9 +96,6 @@ export function About() {
                     <MapPin className="h-3.5 w-3.5 text-purple-light" />
                     {siteConfig.location}
                   </span>
-                  <span className="rounded-full border border-purple/30 bg-purple/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-purple-light">
-                    {siteConfig.hero.speaker}
-                  </span>
                 </div>
 
                 <ul className="mt-5 flex flex-wrap justify-center gap-2" aria-label="Focus domains">

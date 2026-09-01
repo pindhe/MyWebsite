@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Send,
   Mail,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ContactThanks } from "@/components/ui/ContactThanks";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
@@ -49,67 +50,52 @@ const socials = [
   { icon: Mail, href: `mailto:${siteConfig.email}`, label: "Email", color: "hover:text-purple-light" },
 ];
 
-const projectTypes = [
-  "Website Development",
-  "Mobile App",
-  "UI/UX Design",
-  "Backend / API",
-  "AI Solutions",
-  "Consultation",
-  "Other",
-];
-
 type FormStatus = "idle" | "sending" | "sent" | "error";
 
 const inputClass = "theme-input glass h-12 w-full px-4 text-sm";
 
 export function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
-    phone: "",
-    subject: "",
-    projectType: "",
     message: "",
+    company: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  const closeThanks = useCallback(() => setStatus("idle"), []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
+    setError("");
 
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      form.phone && `Phone: ${form.phone}`,
-      `Project Type: ${form.projectType || "Not specified"}`,
-      `Subject: ${form.subject}`,
-      "",
-      form.message,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const mailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
-      `[Portfolio] ${form.subject}`
-    )}&body=${encodeURIComponent(body)}`;
-
-    await new Promise((r) => setTimeout(r, 800));
-    window.location.href = mailto;
-
-    setStatus("sent");
-    setForm({ name: "", email: "", phone: "", subject: "", projectType: "", message: "" });
-    setTimeout(() => setStatus("idle"), 5000);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Send failed");
+      }
+      setStatus("sent");
+      setForm({ name: "", email: "", message: "", company: "" });
+    } catch (err) {
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Could not send the message.");
+    }
   };
 
   return (
     <section id="contact" className="section-padding relative overflow-hidden bg-surface/30">
+      <ContactThanks open={status === "sent"} onClose={closeThanks} />
       {/* Background accent */}
       <div className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-purple/10 blur-[120px]" />
       <div className="pointer-events-none absolute -right-32 bottom-1/4 h-80 w-80 rounded-full bg-blue-500/10 blur-[100px]" />
@@ -207,6 +193,18 @@ export function Contact() {
             <p className="mt-1 text-sm text-slate-400">Fill out the form and I&apos;ll get back to you shortly.</p>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <div className="hidden" aria-hidden>
+                <label htmlFor="company">Company</label>
+                <input
+                  id="company"
+                  name="company"
+                  value={form.company}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="mb-1.5 block text-xs font-medium text-slate-400">
@@ -239,59 +237,6 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="phone" className="mb-1.5 block text-xs font-medium text-slate-400">
-                    Phone Number
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="+252 63 000 0000"
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="projectType" className="mb-1.5 block text-xs font-medium text-slate-400">
-                    Project Type
-                  </label>
-                  <select
-                    id="projectType"
-                    name="projectType"
-                    value={form.projectType}
-                    onChange={handleChange}
-                    className={cn(inputClass, "cursor-pointer appearance-none")}
-                  >
-                    <option value="" className="bg-surface-deep">
-                      Select a service
-                    </option>
-                    {projectTypes.map((type) => (
-                      <option key={type} value={type} className="bg-surface-deep">
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="mb-1.5 block text-xs font-medium text-slate-400">
-                  Subject <span className="text-purple-light">*</span>
-                </label>
-                <input
-                  id="subject"
-                  name="subject"
-                  required
-                  value={form.subject}
-                  onChange={handleChange}
-                  placeholder="Project inquiry / Collaboration"
-                  className={inputClass}
-                />
-              </div>
-
               <div>
                 <label htmlFor="message" className="mb-1.5 block text-xs font-medium text-slate-400">
                   Message <span className="text-purple-light">*</span>
@@ -300,6 +245,7 @@ export function Contact() {
                   id="message"
                   name="message"
                   required
+                  minLength={8}
                   rows={5}
                   value={form.message}
                   onChange={handleChange}
@@ -312,11 +258,13 @@ export function Contact() {
                 {status === "sent" ? (
                   <div className="flex items-center gap-2 text-sm text-green-400">
                     <CheckCircle2 className="h-5 w-5" />
-                    Opening your email client — message ready to send!
+                    Message sent — I&apos;ll reply to your email.
                   </div>
+                ) : status === "error" ? (
+                  <p className="text-sm text-red-400">{error}</p>
                 ) : (
                   <p className="text-xs text-slate-500">
-                    Your message opens in your default email app
+                    Your message is sent straight to {siteConfig.email}
                   </p>
                 )}
 

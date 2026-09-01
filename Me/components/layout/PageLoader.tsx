@@ -2,35 +2,57 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { siteConfig } from "@/lib/config";
 
-const LOADER_KEY = "eng-pindhe-loaded";
+const WELCOME_KEY = "eng-pindhe-welcome";
+const ANIM_MS = 8217;
+const FADE_MS = 0.55;
 
 export function PageLoader() {
-  const [loading, setLoading] = useState(true);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem(LOADER_KEY);
-    if (seen) {
-      setLoading(false);
+    const seen = sessionStorage.getItem(WELCOME_KEY);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (seen || reduce) {
+      setShow(false);
       return;
     }
-    sessionStorage.setItem(LOADER_KEY, "1");
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
+
+    sessionStorage.setItem(WELCOME_KEY, "1");
+    document.documentElement.style.overflow = "hidden";
+
+    const timer = window.setTimeout(() => setShow(false), ANIM_MS);
+    return () => {
+      window.clearTimeout(timer);
+      document.documentElement.style.overflow = "";
+    };
   }, []);
+
+  useEffect(() => {
+    if (!show) {
+      document.documentElement.style.overflow = "";
+    }
+  }, [show]);
 
   return (
     <AnimatePresence>
-      {loading && (
+      {show && (
         <motion.div
+          role="dialog"
+          aria-label="Welcome"
+          aria-modal="true"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--bg-base)]"
+          transition={{ duration: FADE_MS, ease: [0.22, 1, 0.36, 1] }}
+          className="welcome-intro"
         >
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-purple/30 border-t-purple" />
-          <p className="mt-4 font-heading text-base gradient-text">{siteConfig.shortName}</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/welcome.svg"
+            alt="Welcome"
+            className="welcome-intro-mark"
+          />
         </motion.div>
       )}
     </AnimatePresence>
