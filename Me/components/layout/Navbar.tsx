@@ -130,11 +130,14 @@ export function Navbar() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <a
             href="#home"
-            className="relative z-10 flex items-center"
-            aria-label={siteConfig.shortName}
+            className="relative z-10 flex items-center gap-2.5"
+            aria-label="Eng Pindhe"
             onClick={() => onNavClick("#home")}
           >
             <BrandLogo size={38} priority />
+            <span className="font-heading text-sm font-bold tracking-tight sm:text-base">
+              Eng <span className="gradient-text">Pindhe</span>
+            </span>
           </a>
 
           <LayoutGroup id="nav-rail">

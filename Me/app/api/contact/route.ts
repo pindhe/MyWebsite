@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   }
 
   if (body.company) {
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, skipped: true });
   }
 
   const name = body.name?.trim() ?? "";
@@ -60,31 +60,10 @@ export async function POST(request: Request) {
       if (!sent.ok) {
         throw new Error("Resend failed");
       }
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, provider: "resend" });
     }
 
-    const submitted = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        message,
-        _subject: subject,
-        _replyto: email,
-        _template: "table",
-        _captcha: "false",
-      }),
-    });
-
-    if (!submitted.ok) {
-      throw new Error("Mail delivery failed");
-    }
-
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, provider: "formsubmit" });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Could not send the message. Please email me directly." },

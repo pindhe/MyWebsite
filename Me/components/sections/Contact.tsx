@@ -81,10 +81,48 @@ export function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        provider?: string;
+        skipped?: boolean;
+      };
       if (!res.ok || !data.ok) {
         throw new Error(data.error || "Send failed");
       }
+
+      if (!data.skipped && data.provider !== "resend") {
+        const mailed = await fetch(
+          `https://formsubmit.co/ajax/${encodeURIComponent(siteConfig.email)}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              name: form.name.trim(),
+              email: form.email.trim(),
+              message: form.message.trim(),
+              _subject: `Portfolio message from ${form.name.trim()}`,
+              _replyto: form.email.trim(),
+              _template: "table",
+              _captcha: "false",
+            }),
+          }
+        );
+        const mail = (await mailed.json()) as { success?: boolean | string; message?: string };
+        const ok = mail.success === true || mail.success === "true";
+        if (!ok) {
+          const needsActivate = (mail.message || "").toLowerCase().includes("activat");
+          throw new Error(
+            needsActivate
+              ? "Open your inbox and click the FormSubmit activation link, then send again."
+              : mail.message || "Could not send the message. Please email me directly."
+          );
+        }
+      }
+
       setStatus("sent");
       setForm({ name: "", email: "", message: "", company: "" });
     } catch (err) {
