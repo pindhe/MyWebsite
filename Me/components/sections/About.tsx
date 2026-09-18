@@ -118,7 +118,7 @@ export function About() {
                     <Download className="h-4 w-4" />
                     Download CV
                   </CVLink>
-                  <a href="#contact" className="btn-outline !h-11 !px-4 text-sm">
+                  <a href="#contact" data-hire-flight className="btn-outline !h-11 !px-4 text-sm">
                     <Handshake className="h-4 w-4" />
                     Hire me
                   </a>

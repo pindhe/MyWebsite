@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { AuroraBackground } from "@/components/effects/AuroraBackground";
 import { CursorGlow } from "@/components/effects/CursorGlow";
+import { HireFlight } from "@/components/effects/HireFlight";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -14,6 +15,10 @@ import { Skills } from "@/components/sections/Skills";
 import { Projects } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 
+const Gallery = dynamic(
+  () => import("@/components/sections/Gallery").then((m) => ({ default: m.Gallery })),
+  { loading: () => <div className="section-padding" aria-hidden /> }
+);
 const Experience = dynamic(
   () => import("@/components/sections/Experience").then((m) => ({ default: m.Experience })),
   { loading: () => <div className="section-padding" aria-hidden /> }
@@ -24,7 +29,7 @@ const Blog = dynamic(
 );
 const Contact = dynamic(
   () => import("@/components/sections/Contact").then((m) => ({ default: m.Contact })),
-  { loading: () => <div className="section-padding" aria-hidden /> }
+  { loading: () => <div id="contact" className="section-padding" aria-hidden /> }
 );
 
 export default function HomePage() {
@@ -35,6 +40,7 @@ export default function HomePage() {
       <ScrollProgress />
       <AuroraBackground />
       <CursorGlow />
+      <HireFlight />
       <Navbar />
       <main>
         <Hero />
@@ -43,6 +49,7 @@ export default function HomePage() {
         <Projects />
         <Services />
         <Experience />
+        <Gallery />
         <Blog />
         <Contact />
       </main>

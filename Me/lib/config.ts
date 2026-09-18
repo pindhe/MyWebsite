@@ -500,6 +500,7 @@ export const navLinks = [
   { href: "#projects", label: "Projects", icon: "FolderKanban" },
   { href: "#services", label: "Services", icon: "Sparkles" },
   { href: "#experience", label: "Experience", icon: "Briefcase" },
+  { href: "#gallery", label: "Gallery", icon: "Images" },
   { href: "#contact", label: "Contact", icon: "Send" },
 ];
 
@@ -509,3 +510,135 @@ export const projectFilters: { id: ProjectCategory; label: string }[] = [
   { id: "mobile", label: "Mobile" },
   { id: "ai", label: "AI" },
 ];
+
+export type GalleryCategory = "all" | "events" | "meetings" | "stage" | "portraits";
+
+export type GalleryItem = {
+  id: string;
+  src: string;
+  title: string;
+  caption: string;
+  place: string;
+  year: string;
+  category: Exclude<GalleryCategory, "all">;
+  featured?: boolean;
+  portrait?: boolean;
+};
+
+export const galleryFilters: { id: GalleryCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "events", label: "Events" },
+  { id: "meetings", label: "Meetings" },
+  { id: "stage", label: "Stage" },
+  { id: "portraits", label: "Portraits" },
+];
+
+export const gallery: GalleryItem[] = [
+  {
+    id: "official-meeting",
+    src: "/gallery/official-meeting.png",
+    title: "Official visit",
+    caption: "A formal sitting with Somaliland leadership.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "meetings",
+    featured: true,
+  },
+  {
+    id: "siz-presentation",
+    src: "/gallery/siz-presentation.jpg",
+    title: "SIZ presentation",
+    caption: "Presenting the AI Recruitment Platform at Somaliland Innovation Zone.",
+    place: "Somaliland Innovation Zone",
+    year: "2026",
+    category: "stage",
+    featured: true,
+  },
+  {
+    id: "hackathon-certificate",
+    src: "/gallery/hackathon-certificate.jpg",
+    title: "Hackathon 2025",
+    caption: "Certificate of Appreciation — Abaarso Tech University × SOLTELCO.",
+    place: "Abaarso Tech University",
+    year: "2025",
+    category: "events",
+    featured: true,
+  },
+  {
+    id: "hackathon-stage",
+    src: "/gallery/hackathon-stage.jpg",
+    title: "Closing ceremony",
+    caption: "Speaking at the SOLTELCO Hackathon 2025 closing ceremony.",
+    place: "Abaarso Tech University",
+    year: "2025",
+    category: "stage",
+  },
+  {
+    id: "hackathon-team",
+    src: "/gallery/hackathon-team.jpg",
+    title: "Hackathon team",
+    caption: "Building with the Abaarso Tech University Hackathon 2025 team.",
+    place: "Abaarso Tech University",
+    year: "2025",
+    category: "events",
+  },
+  {
+    id: "book-launch",
+    src: "/gallery/book-launch.jpg",
+    title: "Book launch",
+    caption: "Maaraynta Dhaqaalaha launch with Dr. Xamse Xabiib Xuseen.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "events",
+  },
+  {
+    id: "meeting-table",
+    src: "/gallery/meeting-table.jpg",
+    title: "Leadership meeting",
+    caption: "A working session with senior partners in Hargeisa.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "meetings",
+  },
+  {
+    id: "colleagues",
+    src: "/gallery/colleagues.jpg",
+    title: "Professional meetup",
+    caption: "With colleagues and partners after a working visit.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "meetings",
+    portrait: true,
+  },
+  {
+    id: "kf-media",
+    src: "/gallery/kf-media.jpg",
+    title: "KF Media",
+    caption: "Event coverage and a moment from the program.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "events",
+    portrait: true,
+  },
+  {
+    id: "portrait-suit",
+    src: "/gallery/portrait-suit.jpg",
+    title: "Formal portrait",
+    caption: "Hargeisa — ready for professional work.",
+    place: "Hargeisa, Somaliland",
+    year: "2026",
+    category: "portraits",
+    portrait: true,
+  },
+  {
+    id: "portrait-bw",
+    src: "/gallery/portrait-bw.jpg",
+    title: "Black & white portrait",
+    caption: "A quieter frame from the journey.",
+    place: "Somaliland",
+    year: "2026",
+    category: "portraits",
+    portrait: true,
+  },
+];
+

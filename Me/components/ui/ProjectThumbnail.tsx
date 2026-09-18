@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { getProjectImage } from "@/lib/project-images";
+import { getGitHubRepoImage, getProjectImage } from "@/lib/project-images";
 import { generateProjectArtSvg, type ProjectArtInput } from "@/lib/project-art";
 
 interface ProjectThumbnailProps extends ProjectArtInput {
@@ -20,16 +20,22 @@ export function ProjectThumbnail({
   image,
   className,
 }: ProjectThumbnailProps) {
-  const [useFallback, setUseFallback] = useState(false);
+  const sources = useMemo(() => {
+    const primary = getProjectImage({ repo, image });
+    const github = getGitHubRepoImage(repo);
+    return Array.from(new Set([primary, github].filter(Boolean)));
+  }, [image, repo]);
+
+  const [sourceIndex, setSourceIndex] = useState(0);
   const [loaded, setLoaded] = useState(false);
-  const src = getProjectImage({ repo, image });
+  const src = sources[sourceIndex];
 
   useEffect(() => {
-    setUseFallback(false);
+    setSourceIndex(0);
     setLoaded(false);
-  }, [src]);
+  }, [sources]);
 
-  if (useFallback) {
+  if (!src) {
     return (
       <div
         className={cn(
@@ -55,12 +61,15 @@ export function ProjectThumbnail({
         fill
         loading="lazy"
         className={cn(
-          "object-cover transition-all duration-300 group-hover:scale-105",
+          "object-cover object-top transition-[transform,opacity] duration-700 ease-out group-hover:scale-110",
           loaded ? "opacity-100" : "opacity-0"
         )}
         sizes="(max-width:768px) 100vw, 33vw"
         onLoad={() => setLoaded(true)}
-        onError={() => setUseFallback(true)}
+        onError={() => {
+          setLoaded(false);
+          setSourceIndex((current) => current + 1);
+        }}
       />
     </div>
   );

@@ -11,6 +11,7 @@ import {
   FolderKanban,
   Sparkles,
   Briefcase,
+  Images,
   Send,
   type LucideIcon,
 } from "lucide-react";
@@ -28,6 +29,7 @@ const iconMap: Record<string, LucideIcon> = {
   FolderKanban,
   Sparkles,
   Briefcase,
+  Images,
   Send,
 };
 
@@ -123,19 +125,19 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 overflow-visible transition-[padding,background,border] duration-150",
-          scrolled ? "theme-nav-scrolled glass py-3 backdrop-blur-xl" : "bg-transparent py-5"
+          "site-header fixed inset-x-0 top-0 z-50 overflow-visible transition-[padding,background,border,box-shadow] duration-200",
+          scrolled ? "theme-nav-scrolled glass py-3 backdrop-blur-xl" : "py-5"
         )}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <a
             href="#home"
-            className="relative z-10 flex items-center gap-2.5"
+            className="nav-brand relative z-10 flex items-center gap-2.5"
             aria-label="Eng Pindhe"
             onClick={() => onNavClick("#home")}
           >
             <BrandLogo size={38} priority />
-            <span className="font-heading text-sm font-bold tracking-tight sm:text-base">
+            <span className="nav-brand-name font-heading text-sm font-bold tracking-tight sm:text-base">
               Eng <span className="gradient-text">Pindhe</span>
             </span>
           </a>
@@ -200,6 +202,7 @@ export function Navbar() {
               aria-label="Hire me"
               title="Hire me"
               className="nav-action-btn btn-primary"
+              data-hire-flight
               onClick={() => onNavClick("#contact")}
             >
               <Handshake className="h-4 w-4" />

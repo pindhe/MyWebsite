@@ -254,7 +254,7 @@ export function Contact() {
                     required
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="John Doe"
+                    placeholder="yourname"
                     className={inputClass}
                   />
                 </div>
@@ -269,7 +269,7 @@ export function Contact() {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    placeholder="john@example.com"
+                    placeholder="youremail@gmail.com"
                     className={inputClass}
                   />
                 </div>

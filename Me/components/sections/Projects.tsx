@@ -2,6 +2,12 @@
 
 import { useState, useMemo, useEffect } from "react";
 import {
+  motion,
+  AnimatePresence,
+  LayoutGroup,
+  useReducedMotion,
+} from "framer-motion";
+import {
   ExternalLink,
   Github,
   Search,
@@ -9,6 +15,8 @@ import {
   Check,
   Star,
   Globe,
+  ArrowUpRight,
+  Sparkles,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProjectThumbnail } from "@/components/ui/ProjectThumbnail";
@@ -21,6 +29,8 @@ import {
 } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
+const FEATURED_REPOS = ["ilmaCader", "HRC-management", "Tanaad-College"];
+
 const languageColors: Record<string, string> = {
   TypeScript: "bg-blue-500/20 text-blue-300",
   JavaScript: "bg-yellow-500/20 text-yellow-300",
@@ -31,16 +41,49 @@ const languageColors: Record<string, string> = {
 
 const liveCount = projects.filter((p) => p.liveUrl).length;
 
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
+const listVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.04 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: easeOut },
+  },
+  exit: {
+    opacity: 0,
+    y: 12,
+    scale: 0.98,
+    transition: { duration: 0.2 },
+  },
+};
+
 function ProjectCard({
   project,
   image,
+  featured = false,
+  reduceMotion,
 }: {
   project: Project;
   image?: string;
+  featured?: boolean;
+  reduceMotion: boolean | null;
 }) {
   return (
-    <article className="project-card group">
-      <div className="relative h-52 overflow-hidden sm:h-56">
+    <motion.article
+      variants={reduceMotion ? undefined : itemVariants}
+      whileHover={reduceMotion ? undefined : { y: -8 }}
+      transition={{ type: "spring", stiffness: 340, damping: 26 }}
+      className={cn("project-card group", featured && "project-card-featured")}
+    >
+      <div className="project-media relative h-52 overflow-hidden sm:h-56">
         <ProjectThumbnail
           title={project.title}
           repo={project.repo}
@@ -50,10 +93,16 @@ function ProjectCard({
           image={image ?? project.image}
           className="absolute inset-0 h-full"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/40 to-transparent" />
+        <div className="project-media-shade" />
 
-        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-          <span className="rounded-full border border-white/10 bg-purple/80 px-2.5 py-1 text-[10px] font-semibold capitalize backdrop-blur-sm">
+        <div className="absolute left-4 top-4 z-10 flex flex-wrap gap-2">
+          {featured && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-purple/40 bg-purple/80 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
+              <Sparkles className="h-3 w-3" />
+              Featured
+            </span>
+          )}
+          <span className="rounded-full border border-white/10 bg-surface-deep/70 px-2.5 py-1 text-[10px] font-semibold capitalize backdrop-blur-sm">
             {project.category}
           </span>
           <span
@@ -67,11 +116,18 @@ function ProjectCard({
         </div>
 
         {project.liveUrl && (
-          <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-semibold text-emerald-300 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          <span className="absolute right-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-semibold text-emerald-300 backdrop-blur-sm">
+            <span className="project-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
             Live
           </span>
         )}
+
+        <div className="project-media-cta">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+            {project.liveUrl ? "Open live demo" : "View repository"}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
       </div>
 
       <div className="p-5">
@@ -138,11 +194,12 @@ function ProjectCard({
           </a>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
 export function Projects() {
+  const reduceMotion = useReducedMotion();
   const [filter, setFilter] = useState<ProjectCategory>("all");
   const [search, setSearch] = useState("");
   const [dynamicImages, setDynamicImages] = useState<Record<string, string>>({});
@@ -168,27 +225,44 @@ export function Projects() {
     () =>
       projects.filter((p) => {
         const matchCat = filter === "all" || p.category === filter;
+        const q = search.trim().toLowerCase();
         const matchSearch =
-          !search ||
-          p.title.toLowerCase().includes(search.toLowerCase()) ||
-          p.repo.toLowerCase().includes(search.toLowerCase()) ||
-          p.tech.some((t) => t.toLowerCase().includes(search.toLowerCase())) ||
-          p.language.toLowerCase().includes(search.toLowerCase());
+          !q ||
+          p.title.toLowerCase().includes(q) ||
+          p.repo.toLowerCase().includes(q) ||
+          p.tech.some((t) => t.toLowerCase().includes(q)) ||
+          p.language.toLowerCase().includes(q);
         return matchCat && matchSearch;
       }),
     [filter, search]
   );
 
+  const featuredSet = useMemo(() => new Set(FEATURED_REPOS), []);
+  const motionOff = Boolean(reduceMotion);
+
   return (
     <section id="projects" className="section-padding">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          tag="Projects"
-          title="Featured Work"
-          subtitle="Eight shipped products from GitHub — real product photos and live deploy links, led by ilmaCader, Hage Reading Club, and Tanaad College."
-        />
+        <motion.div
+          initial={motionOff ? false : { opacity: 0, y: 16 }}
+          whileInView={motionOff ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.45, ease: easeOut }}
+        >
+          <SectionHeader
+            tag="Projects"
+            title="Featured Work"
+            subtitle="Live products I designed and shipped — family platforms, college sites, AI tools, and event apps."
+          />
+        </motion.div>
 
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <motion.div
+          className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          initial={motionOff ? false : { opacity: 0, y: 14 }}
+          whileInView={motionOff ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.08, ease: easeOut }}
+        >
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 rounded-xl glass px-4 py-2">
               <FolderOpen className="h-4 w-4 text-purple-light" />
@@ -217,27 +291,45 @@ export function Projects() {
           >
             <Github className="h-4 w-4" /> All repositories
           </a>
-        </div>
+        </motion.div>
 
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {projectFilters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setFilter(f.id)}
-                className={cn(
-                  "filter-chip",
-                  filter === f.id ? "bg-purple text-white shadow-glow" : "glass text-slate-400 hover:text-white"
-                )}
-              >
-                {f.label}
-                {f.id !== "all" && (
-                  <span className="ml-1.5 opacity-60">({categoryCounts[f.id] ?? 0})</span>
-                )}
-              </button>
-            ))}
-          </div>
+        <motion.div
+          className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+          initial={motionOff ? false : { opacity: 0, y: 12 }}
+          whileInView={motionOff ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.12, ease: easeOut }}
+        >
+          <LayoutGroup>
+            <div className="flex flex-wrap gap-2">
+              {projectFilters.map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setFilter(f.id)}
+                  className={cn(
+                    "filter-chip relative isolate",
+                    filter === f.id ? "text-white" : "glass text-slate-400 hover:text-white"
+                  )}
+                >
+                  {filter === f.id && !motionOff && (
+                    <motion.span
+                      layoutId="pindhe-project-filter"
+                      className="absolute inset-0 -z-10 rounded-full bg-purple shadow-glow"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  {filter === f.id && motionOff && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-purple shadow-glow" />
+                  )}
+                  {f.label}
+                  {f.id !== "all" && (
+                    <span className="ml-1.5 opacity-60">({categoryCounts[f.id] ?? 0})</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </LayoutGroup>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <input
@@ -248,33 +340,67 @@ export function Projects() {
               className="theme-input glass h-11 w-full pl-10 pr-4 text-sm lg:w-72"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((project) => (
-            <ProjectCard
-              key={project.repo}
-              project={project}
-              image={project.image ?? dynamicImages[project.repo]}
-            />
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          {filtered.length === 0 ? (
+            <motion.p
+              key="empty"
+              initial={motionOff ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={motionOff ? undefined : { opacity: 0, y: -8 }}
+              className="py-16 text-center text-slate-400"
+            >
+              No projects match your search.
+            </motion.p>
+          ) : (
+            <motion.div
+              key={`${filter}-${search.trim()}`}
+              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              variants={motionOff ? undefined : listVariants}
+              initial={motionOff ? false : "hidden"}
+              animate={motionOff ? undefined : "show"}
+              exit={motionOff ? undefined : { opacity: 0 }}
+            >
+              {filtered.map((project) => (
+                <ProjectCard
+                  key={project.repo}
+                  project={project}
+                  image={project.image ?? dynamicImages[project.repo]}
+                  featured={featuredSet.has(project.repo)}
+                  reduceMotion={reduceMotion}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {filtered.length === 0 && (
-          <p className="py-16 text-center text-slate-400">No projects match your search.</p>
-        )}
-
-        <p className="mt-12 text-center text-sm text-slate-400">
-          {filtered.length} featured projects ·{" "}
-          <a
-            href={githubReposUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-purple-light hover:underline"
-          >
-            See everything on GitHub →
-          </a>
-        </p>
+        <motion.div
+          initial={motionOff ? false : { opacity: 0, y: 20 }}
+          whileInView={motionOff ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, ease: easeOut }}
+          className="mt-12 overflow-hidden rounded-2xl border border-purple/20 bg-gradient-to-r from-purple/20 via-purple/10 to-blue-600/10 p-8 text-center sm:p-10"
+        >
+          <h3 className="font-heading text-2xl font-bold">Have a product in mind?</h3>
+          <p className="mx-auto mt-2 max-w-lg text-sm text-slate-400">
+            {filtered.length} featured projects · from family platforms to college sites and AI tools.
+            Let&apos;s build the next one.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a href="#contact" className="btn-primary inline-flex">
+              Start a project
+            </a>
+            <a
+              href={githubReposUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline inline-flex"
+            >
+              <Github className="h-4 w-4" /> See everything on GitHub
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -255,11 +255,11 @@ export function Hero() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mb-6 flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-purple/30 bg-purple/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-light">
+              <span className="hero-kicker inline-flex items-center gap-2 rounded-full border border-purple/30 bg-purple/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-light">
                 <Sparkles className="h-3.5 w-3.5" />
                 {siteConfig.hero.greeting}
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs text-slate-400">
+              <span className="hero-meta inline-flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs">
                 <MapPin className="h-3.5 w-3.5 text-purple-light" />
                 {siteConfig.location}
               </span>
@@ -287,7 +287,7 @@ export function Hero() {
               <span className="hero-caret ml-1 inline-block h-6 w-[2px] bg-purple-bright sm:h-7" />
             </div>
 
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-relaxed theme-text-secondary sm:text-lg">
               {siteConfig.bio}
             </p>
             <p className="mt-2 text-sm font-medium tracking-wide text-purple-light">
@@ -299,7 +299,7 @@ export function Hero() {
                 <Download className="h-4 w-4" />
                 Download CV
               </CVLink>
-              <a href="#contact" className="btn-outline !px-5">
+              <a href="#contact" data-hire-flight className="btn-outline !px-5">
                 <Handshake className="h-4 w-4" />
                 Hire me
               </a>
@@ -318,7 +318,7 @@ export function Hero() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   title={label}
-                  className="nav-icon-btn glass !rounded-xl"
+                  className="hero-social nav-icon-btn glass !rounded-xl"
                 >
                   <Icon className="h-5 w-5" />
                 </a>
@@ -339,7 +339,7 @@ export function Hero() {
               <div className="spin-slow absolute -inset-5 rounded-[2.5rem] border border-dashed border-purple/25" />
 
               <div className="hero-portrait-ring relative">
-                <div className="glass-card relative aspect-[4/5] w-72 overflow-hidden rounded-[1.85rem] border-0 shadow-glow sm:w-80 lg:w-[22rem]">
+                <div className="hero-portrait-frame glass-card relative aspect-[4/5] w-72 overflow-hidden rounded-[1.85rem] border-0 shadow-glow sm:w-80 lg:w-[22rem]">
                   <Image
                     src={siteConfig.profileImage}
                     alt={siteConfig.name}
@@ -349,7 +349,7 @@ export function Hero() {
                     sizes="(max-width:768px) 288px, 352px"
                     className="object-cover object-[center_22%] grayscale contrast-[1.08]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/20 to-purple/5" />
+                  <div className="hero-portrait-shade absolute inset-0" />
                   <div className="hero-profile-text absolute inset-x-0 bottom-0 hidden p-5 lg:block">
                     <p className="font-heading text-lg font-bold text-white">
                       {siteConfig.hero.displayName}

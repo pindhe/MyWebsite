@@ -47,13 +47,7 @@ export function HeroBackground() {
           <div className="hero-bg-layer hero-bg-photo-overlay-mobile lg:hidden" />
           <div className="hero-bg-layer hero-bg-photo-overlay hidden lg:block" />
           <div className="hero-bg-layer hero-bg-vignette" />
-          <div
-            className="hero-bg-layer opacity-30 lg:opacity-70"
-            style={{
-              backgroundImage: "url('/hero/hero-grid.svg')",
-              backgroundSize: "cover",
-            }}
-          />
+          <div className="hero-bg-layer hero-bg-grid opacity-30 lg:opacity-70" />
           <div className="hero-bg-layer hero-bg-noise" />
         </div>
         <div className="hero-mobile-bg-tail lg:hidden" />
