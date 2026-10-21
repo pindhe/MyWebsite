@@ -342,6 +342,18 @@
     );
   }
 
+  /* Photo development: deepen contrast and color, lift the hazy look */
+  .gallery-card img,
+  .gallery-lightbox-frame img {
+    filter: contrast(1.1) saturate(1.18) brightness(0.97);
+  }
+
+  @media (hover: hover) {
+    .gallery-card:hover img {
+      filter: contrast(1.14) saturate(1.25);
+    }
+  }
+
   .gallery-card-cta {
     @apply pointer-events-none absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300;
     background: rgba(5, 8, 22, 0.18);
