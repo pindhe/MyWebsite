@@ -75,9 +75,9 @@ export function ContactThanks({ open, onClose }: ContactThanksProps) {
               className="contact-thanks-anim"
             />
             <h2 id="contact-thanks-title" className="contact-thanks-title">
-              Thanks — I&apos;ll answer you quickly
+              Thank you for contacting me
             </h2>
-            <p className="contact-thanks-sub">Your message is on its way.</p>
+            <p className="contact-thanks-sub">I&apos;ll answer you quickly — your message is on its way.</p>
             <p className="contact-thanks-hint">Tap anywhere to close</p>
           </motion.div>
         </motion.div>

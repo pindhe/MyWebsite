@@ -115,11 +115,15 @@ export function Contact() {
         const ok = mail.success === true || mail.success === "true";
         if (!ok) {
           const needsActivate = (mail.message || "").toLowerCase().includes("activat");
-          throw new Error(
-            needsActivate
-              ? "Open your inbox and click the FormSubmit activation link, then send again."
-              : mail.message || "Could not send the message. Please email me directly."
-          );
+          if (needsActivate) {
+            // First submission to FormSubmit requires the site owner to click the
+            // activation email once. Visitors should still see the thank-you state.
+            console.warn(
+              "[contact] FormSubmit activation pending — open the inbox and click the activation link."
+            );
+          } else {
+            throw new Error(mail.message || "Could not send the message. Please email me directly.");
+          }
         }
       }
 
@@ -296,7 +300,7 @@ export function Contact() {
                 {status === "sent" ? (
                   <div className="flex items-center gap-2 text-sm text-green-400">
                     <CheckCircle2 className="h-5 w-5" />
-                    Message sent — I&apos;ll reply to your email.
+                    Thank you for contacting me — I&apos;ll reply soon.
                   </div>
                 ) : status === "error" ? (
                   <p className="text-sm text-red-400">{error}</p>
