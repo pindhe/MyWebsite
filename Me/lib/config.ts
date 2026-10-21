@@ -41,7 +41,7 @@ export const siteConfig = {
       motion: "hero-photo-3",
     },
   ],
-  profileImage: "/profile.jpeg",
+  profileImage: "/Sawir Madow iyo Caddaan oo Casri ah.png",
   logo: "/logo.jpg",
   cvPath: "/resumepindhe.pdf",
   hero: {
