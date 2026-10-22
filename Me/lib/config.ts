@@ -520,6 +520,8 @@ export type GalleryItem = {
   caption: string;
   place: string;
   year: string;
+  date: string;
+  tags: string[];
   category: Exclude<GalleryCategory, "all">;
   featured?: boolean;
   portrait?: boolean;
@@ -541,6 +543,8 @@ export const gallery: GalleryItem[] = [
     caption: "A formal sitting with Somaliland leadership.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "February 2026",
+    tags: ["Leadership", "Government", "Meeting"],
     category: "meetings",
     featured: true,
   },
@@ -551,6 +555,8 @@ export const gallery: GalleryItem[] = [
     caption: "Presenting the AI Recruitment Platform at Somaliland Innovation Zone.",
     place: "Somaliland Innovation Zone",
     year: "2026",
+    date: "March 2026",
+    tags: ["AI", "Recruitment", "Speaking"],
     category: "stage",
     featured: true,
   },
@@ -561,6 +567,8 @@ export const gallery: GalleryItem[] = [
     caption: "Certificate of Appreciation — Abaarso Tech University × SOLTELCO.",
     place: "Abaarso Tech University",
     year: "2025",
+    date: "December 2025",
+    tags: ["Hackathon", "Award", "SOLTELCO"],
     category: "events",
     featured: true,
   },
@@ -571,6 +579,8 @@ export const gallery: GalleryItem[] = [
     caption: "Speaking at the SOLTELCO Hackathon 2025 closing ceremony.",
     place: "Abaarso Tech University",
     year: "2025",
+    date: "December 2025",
+    tags: ["Hackathon", "Speaking", "SOLTELCO"],
     category: "stage",
   },
   {
@@ -580,6 +590,8 @@ export const gallery: GalleryItem[] = [
     caption: "Building with the Abaarso Tech University Hackathon 2025 team.",
     place: "Abaarso Tech University",
     year: "2025",
+    date: "December 2025",
+    tags: ["Teamwork", "Hackathon", "ATU"],
     category: "events",
   },
   {
@@ -589,6 +601,8 @@ export const gallery: GalleryItem[] = [
     caption: "Maaraynta Dhaqaalaha launch with Dr. Xamse Xabiib Xuseen.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "January 2026",
+    tags: ["Books", "Launch", "Authors"],
     category: "events",
   },
   {
@@ -598,6 +612,8 @@ export const gallery: GalleryItem[] = [
     caption: "A working session with senior partners in Hargeisa.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "April 2026",
+    tags: ["Leadership", "Strategy", "Partners"],
     category: "meetings",
   },
   {
@@ -607,6 +623,8 @@ export const gallery: GalleryItem[] = [
     caption: "With colleagues and partners after a working visit.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "May 2026",
+    tags: ["Networking", "Colleagues", "Community"],
     category: "meetings",
     portrait: true,
   },
@@ -617,6 +635,8 @@ export const gallery: GalleryItem[] = [
     caption: "Event coverage and a moment from the program.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "June 2026",
+    tags: ["Media", "Coverage", "KF Media"],
     category: "events",
     portrait: true,
   },
@@ -627,6 +647,8 @@ export const gallery: GalleryItem[] = [
     caption: "Hargeisa — ready for professional work.",
     place: "Hargeisa, Somaliland",
     year: "2026",
+    date: "July 2026",
+    tags: ["Portrait", "Professional", "Hargeisa"],
     category: "portraits",
     portrait: true,
   },
@@ -637,6 +659,8 @@ export const gallery: GalleryItem[] = [
     caption: "A quieter frame from the journey.",
     place: "Somaliland",
     year: "2026",
+    date: "August 2026",
+    tags: ["Portrait", "Studio", "Journey"],
     category: "portraits",
     portrait: true,
   },

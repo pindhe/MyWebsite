@@ -344,14 +344,95 @@
 
   /* Photo development: deepen contrast and color, lift the hazy look */
   .gallery-card img,
+  .gallery-showcase-media img,
   .gallery-lightbox-frame img {
     filter: contrast(1.1) saturate(1.18) brightness(0.97);
   }
 
   @media (hover: hover) {
-    .gallery-card:hover img {
+    .gallery-card:hover img,
+    .gallery-showcase-media:hover img {
       filter: contrast(1.14) saturate(1.25);
     }
+  }
+
+  /* ── Gallery showcase (image + info, Back / Next) ── */
+  .gallery-showcase {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+    @apply relative overflow-hidden rounded-3xl;
+  }
+
+  .gallery-showcase-media {
+    @apply relative block w-full overflow-hidden;
+    aspect-ratio: 16 / 10;
+    background: rgba(5, 8, 22, 0.45);
+  }
+
+  .gallery-showcase-zoom {
+    @apply pointer-events-none absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs font-semibold text-white opacity-0 backdrop-blur-sm transition-opacity duration-300;
+  }
+
+  @media (hover: hover) {
+    .gallery-showcase-media:hover .gallery-showcase-zoom {
+      opacity: 1;
+    }
+  }
+
+  .gallery-showcase-side-arrow {
+    @apply absolute top-[45%] z-20 h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border text-slate-300 transition-colors duration-150;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+  }
+
+  .gallery-showcase-side-arrow:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+  }
+
+  .gallery-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider;
+    background: var(--chip-bg);
+    border-color: var(--chip-border);
+    color: var(--text-secondary);
+  }
+
+  .gallery-badge-featured {
+    @apply border-transparent bg-purple text-white;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .gallery-tag {
+    @apply rounded-full border px-3 py-1.5 text-xs font-medium transition-colors duration-150;
+    background: var(--chip-bg);
+    border-color: var(--chip-border);
+    color: var(--text-muted);
+  }
+
+  .gallery-tag:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+
+  .gallery-nav-btn {
+    @apply tap-fast inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-semibold transition-colors duration-150;
+    background: transparent;
+    border-color: var(--btn-outline-border);
+    color: var(--btn-outline-text);
+  }
+
+  .gallery-nav-btn:hover {
+    border-color: var(--border-hover);
+  }
+
+  .gallery-nav-btn-primary {
+    @apply border-transparent bg-purple text-white;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .gallery-nav-btn-primary:hover {
+    @apply brightness-110;
   }
 
   .gallery-card-cta {

@@ -1,13 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import {
-  AnimatePresence,
-  LayoutGroup,
-  motion,
-  useReducedMotion,
-} from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Calendar,
   ChevronLeft,
@@ -36,86 +31,172 @@ const categoryLabel: Record<Exclude<GalleryCategory, "all">, string> = {
   portraits: "Portrait",
 };
 
-function GalleryCard({
+function Showcase({
   item,
   index,
+  total,
+  onPrev,
+  onNext,
   onOpen,
   reduceMotion,
 }: {
   item: GalleryItem;
   index: number;
+  total: number;
+  onPrev: () => void;
+  onNext: () => void;
   onOpen: () => void;
   reduceMotion: boolean;
 }) {
   return (
-    <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 22 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay: Math.min(index * 0.05, 0.28), ease: easeOut }}
-      className="gallery-card group"
-    >
+    <div className="gallery-showcase">
+      {/* Side arrows (desktop) */}
       <button
         type="button"
-        onClick={onOpen}
-        className="block w-full text-left"
-        aria-label={`Open ${item.title}`}
+        onClick={onPrev}
+        aria-label="Previous photo"
+        className="gallery-showcase-side-arrow left-0 hidden -translate-x-1/2 xl:flex"
       >
-        <div className="gallery-card-media relative h-56 overflow-hidden sm:h-60">
-          <Image
-            src={item.src}
-            alt={item.title}
-            fill
-            sizes="(max-width:768px) 100vw, 33vw"
-            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-          />
-          <div className="gallery-card-shade" />
-          <div className="absolute left-4 top-4 z-10 flex flex-wrap gap-2">
-            {item.featured && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-purple/90 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
-                <Sparkles className="h-3 w-3" />
-                Featured
-              </span>
-            )}
-            <span className="rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              {categoryLabel[item.category]}
-            </span>
-          </div>
-          <div className="gallery-card-cta">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-              <ZoomIn className="h-3.5 w-3.5" />
+        <ChevronLeft className="h-6 w-6" />
+      </button>
+      <button
+        type="button"
+        onClick={onNext}
+        aria-label="Next photo"
+        className="gallery-showcase-side-arrow right-0 hidden translate-x-1/2 xl:flex"
+      >
+        <ChevronRight className="h-6 w-6" />
+      </button>
+
+      <div className="grid gap-0 lg:grid-cols-12">
+        {/* Image */}
+        <div className="lg:col-span-7">
+          <button
+            type="button"
+            onClick={onOpen}
+            className="gallery-showcase-media group"
+            aria-label={`Open ${item.title}`}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={item.id}
+                className="absolute inset-0"
+                initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.5, ease: easeOut }}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width:1024px) 100vw, 58vw"
+                  className="object-cover object-center"
+                />
+              </motion.div>
+            </AnimatePresence>
+            <span className="gallery-showcase-zoom">
+              <ZoomIn className="h-4 w-4" />
               View photo
             </span>
+          </button>
+
+          {/* Mobile nav row under image */}
+          <div className="flex items-center justify-between gap-3 px-1 py-4 lg:hidden">
+            <button type="button" onClick={onPrev} className="gallery-nav-btn">
+              <ChevronLeft className="h-4 w-4" />
+              Back
+            </button>
+            <span className="text-xs font-medium text-slate-500">
+              {index + 1} of {total} images
+            </span>
+            <button type="button" onClick={onNext} className="gallery-nav-btn gallery-nav-btn-primary">
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
 
-        <div className="p-5">
-          <div className="flex items-center justify-between gap-2 text-[11px] text-slate-500">
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5 text-purple-light" />
-              {item.year}
-            </span>
-            <span className="inline-flex min-w-0 items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-purple-light" />
-              <span className="truncate">{item.place}</span>
-            </span>
-          </div>
-          <h3 className="mt-3 font-heading text-lg font-semibold leading-snug transition-colors duration-150 group-hover:text-purple-light">
-            {item.title}
-          </h3>
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-400">
-            {item.caption}
-          </p>
+        {/* Info */}
+        <div className="flex flex-col p-6 sm:p-8 lg:col-span-5 lg:border-l lg:border-[var(--glass-border)]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={item.id}
+              initial={reduceMotion ? false : { opacity: 0, x: 18 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={reduceMotion ? undefined : { opacity: 0, x: -12 }}
+              transition={{ duration: 0.35, ease: easeOut }}
+              className="flex h-full flex-col"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                {item.featured && (
+                  <span className="gallery-badge gallery-badge-featured">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Featured
+                  </span>
+                )}
+                <span className="gallery-badge">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {categoryLabel[item.category]}
+                </span>
+                <span className="ml-auto text-sm font-medium text-slate-500">
+                  {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+                </span>
+              </div>
+
+              <h3 className="mt-5 font-heading text-2xl font-bold leading-tight sm:text-[1.75rem]">
+                {item.title}
+              </h3>
+
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4 text-purple-light" />
+                  {item.date}
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4 text-purple-light" />
+                  {item.place}
+                </span>
+              </div>
+
+              <p className="mt-4 text-sm leading-relaxed text-slate-400 sm:text-base">
+                {item.caption}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {item.tags.map((tag) => (
+                  <span key={tag} className="gallery-tag">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-auto hidden items-center justify-between gap-3 pt-8 lg:flex">
+                <button type="button" onClick={onPrev} className="gallery-nav-btn">
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </button>
+                <span className="text-xs font-medium text-slate-500">
+                  {index + 1} of {total} images
+                </span>
+                <button type="button" onClick={onNext} className="gallery-nav-btn gallery-nav-btn-primary">
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </button>
-    </motion.article>
+      </div>
+    </div>
   );
 }
 
 export function Gallery() {
   const reduceMotion = Boolean(useReducedMotion());
   const [filter, setFilter] = useState<GalleryCategory>("all");
-  const [active, setActive] = useState<number | null>(null);
+  const [index, setIndex] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
 
   const counts = useMemo(() => {
     const next: Partial<Record<GalleryCategory, number>> = { all: gallery.length };
@@ -130,29 +211,41 @@ export function Gallery() {
     [filter]
   );
 
-  const current = active == null ? null : items[active];
+  const total = items.length;
+  const safeIndex = total === 0 ? 0 : Math.min(index, total - 1);
+  const current = total === 0 ? null : items[safeIndex];
+
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      setIndex((i) => {
+        const next = total === 0 ? 0 : (i + dir + total) % total;
+        return next;
+      });
+    },
+    [total]
+  );
+
+  const selectFilter = (option: GalleryCategory) => {
+    setFilter(option);
+    setIndex(0);
+  };
 
   useEffect(() => {
-    if (active == null) return;
-
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActive(null);
-      if (event.key === "ArrowRight") {
-        setActive((i) => (i == null ? 0 : (i + 1) % items.length));
-      }
-      if (event.key === "ArrowLeft") {
-        setActive((i) => (i == null ? 0 : (i - 1 + items.length) % items.length));
-      }
-    };
+    if (!lightbox) return;
 
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLightbox(false);
+      if (event.key === "ArrowRight") go(1);
+      if (event.key === "ArrowLeft") go(-1);
+    };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [active, items.length]);
+  }, [lightbox, go]);
 
   return (
     <section id="gallery" className="section-padding bg-surface/30">
@@ -176,62 +269,56 @@ export function Gallery() {
               Events, meetings, stage & portraits
             </div>
           </div>
-          <LayoutGroup>
-            <div className="flex flex-wrap gap-2">
-              {galleryFilters.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => {
-                    setFilter(option.id);
-                    setActive(null);
-                  }}
-                  className={cn(
-                    "filter-chip relative isolate",
-                    filter === option.id ? "text-white" : "glass text-slate-400 hover:text-white"
-                  )}
-                >
-                  {filter === option.id && (
-                    <motion.span
-                      layoutId="pindhe-gallery-filter"
-                      className="absolute inset-0 -z-10 rounded-full bg-purple shadow-glow"
-                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                    />
-                  )}
-                  {option.label}
-                  <span className="ml-1.5 opacity-60">({counts[option.id] ?? 0})</span>
-                </button>
-              ))}
-            </div>
-          </LayoutGroup>
+          <div className="flex flex-wrap gap-2">
+            {galleryFilters.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => selectFilter(option.id)}
+                className={cn(
+                  "filter-chip",
+                  filter === option.id
+                    ? "bg-purple text-white shadow-glow"
+                    : "glass text-slate-400 hover:text-white"
+                )}
+              >
+                {option.label}
+                <span className="ml-1.5 opacity-60">({counts[option.id] ?? 0})</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, index) => (
-            <GalleryCard
-              key={item.id}
-              item={item}
-              index={index}
-              reduceMotion={reduceMotion}
-              onOpen={() => setActive(index)}
-            />
-          ))}
-        </div>
+        {current ? (
+          <Showcase
+            item={current}
+            index={safeIndex}
+            total={total}
+            onPrev={() => go(-1)}
+            onNext={() => go(1)}
+            onOpen={() => setLightbox(true)}
+            reduceMotion={reduceMotion}
+          />
+        ) : (
+          <div className="glass-card p-10 text-center text-slate-400">
+            No photos in this category yet.
+          </div>
+        )}
 
         <AnimatePresence>
-          {current && active != null && (
+          {lightbox && current && (
             <motion.div
               className="gallery-lightbox"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActive(null)}
+              onClick={() => setLightbox(false)}
             >
               <button
                 type="button"
                 className="gallery-lightbox-close"
                 aria-label="Close gallery"
-                onClick={() => setActive(null)}
+                onClick={() => setLightbox(false)}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -241,7 +328,7 @@ export function Gallery() {
                 aria-label="Previous photo"
                 onClick={(event) => {
                   event.stopPropagation();
-                  setActive((i) => (i == null ? 0 : (i - 1 + items.length) % items.length));
+                  go(-1);
                 }}
               >
                 <ChevronLeft className="h-6 w-6" />
@@ -252,7 +339,7 @@ export function Gallery() {
                 aria-label="Next photo"
                 onClick={(event) => {
                   event.stopPropagation();
-                  setActive((i) => (i == null ? 0 : (i + 1) % items.length));
+                  go(1);
                 }}
               >
                 <ChevronRight className="h-6 w-6" />
@@ -278,7 +365,7 @@ export function Gallery() {
                 </div>
                 <figcaption className="gallery-lightbox-caption">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-white/60">
-                    {active + 1} / {items.length} · {categoryLabel[current.category]} · {current.year}
+                    {safeIndex + 1} / {total} · {categoryLabel[current.category]} · {current.date}
                   </p>
                   <p className="mt-1 font-heading text-lg font-semibold">{current.title}</p>
                   <p className="mt-1 text-sm text-white/75">{current.caption}</p>
